@@ -109,7 +109,6 @@ function checkNotAuthenticated(req, res, next) {
  * Express initialization.
  */
 const expressApp = express();
-expressApp.set('views', path.join(__dirname, 'views'));
 
 expressApp.use(cors());
 expressApp.use(bodyParser.json());

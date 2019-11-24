@@ -1,26 +1,41 @@
 import { api } from './api.js'
-import axios from 'axios'
 
 async function follow(username) {
-  axios.post(`${api}/follow`, {
-    username
-  })
+  fetch(`${api}/follow`,
+    {
+      method: 'POST',
+      body: JSON.stringify({
+        username
+      }),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+        Accept: 'application/json; charset=UTF-8',
+      },
+    })
   .catch((err) => {
     // TODO: Handle the error.
   })
   .then((res) => {
-    // TODO: Handle the response.
+    return res;
   });
 }
 
 async function unfollow(username) {
-  axios.delete(`${api}/follow`, {
-    username
-  })
+  fetch(`${api}/unfollow`,
+    {
+      method: 'DELETE',
+      body: JSON.stringify({
+        username
+      }),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+        Accept: 'application/json; charset=UTF-8',
+      },
+    })
   .catch((err) => {
     // TODO: Handle the error.
   })
   .then((res) => {
-    // TODO: Handle the response.
+    return res;
   });
 }

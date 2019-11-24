@@ -1,30 +1,64 @@
 import { api } from './api.js'
-import axios from 'axios'
 
 async function register(firstName, lastName, email, password, username, file) {
-  axios.post(`${api}/register`, {
-    firstName,
-    lastName,
-    email,
-    password,
-    username,
-    file,
-  })
+  fetch(`${api}/register`,
+    {
+      method: 'POST',
+      body: JSON.stringify({
+        firstName,
+        lastName,
+        email,
+        password,
+        username,
+        file,
+      }),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+        Accept: 'application/json; charset=UTF-8',
+      },
+    })
   .catch((err) => {
     // TODO: Handle the error.
   })
   .then((res) => {
-    // TODO: Handle the response.
+    return res;
   });
 }
 
-async function login(firstName, lastName, email, password, username, file) {
-  axios.post(`${api}/login`, {
-  })
+async function login(email, password) {
+  fetch(`${api}/login`,
+    {
+      method: 'POST',
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+        Accept: 'application/json; charset=UTF-8',
+      },
+    })
   .catch((err) => {
     // TODO: Handle the error.
   })
   .then((res) => {
-    // TODO: Handle the response.
+    return res;
+  });
+}
+
+async function logout() {
+  fetch(`${api}/logout`,
+    {
+      method: 'DELETE',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+        Accept: 'application/json; charset=UTF-8',
+      },
+    })
+  .catch((err) => {
+    // TODO: Handle the error.
+  })
+  .then((res) => {
+    return res;
   });
 }

@@ -19,9 +19,11 @@ router.post('/register', checkNotAuthenticated, parser.single('image'), async (r
   const { file } = req;
 
   try {
-    const defaultImg = fs.readFileSync(path.join(__dirname, 'public/images/default-profile.png'));
     const hashedPassword = await bcrypt.hash(password, 10);
-    let image = Buffer.from(defaultImg, 'base64');
+
+    // Leave image undefined if the user does not upload a profile picture.
+    // Handle undefined case on the client side.
+    let image;
     const userId = Date.now().toString();
 
     User.findOne({ email })

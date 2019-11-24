@@ -1,39 +1,65 @@
 import { api } from './api.js'
-import axios from 'axios'
 
 async function addComment(postId, text) {
-  axios.post(`${api}/comment/${postId}`, {
-    postId,
-    text
-  })
+  fetch(`${api}/addComment`,
+    {
+      method: 'POST',
+      body: JSON.stringify({
+        postId,
+        text,
+      }),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+        Accept: 'application/json; charset=UTF-8',
+      },
+    })
   .catch((err) => {
     // TODO: Handle the error.
   })
   .then((res) => {
-    // TODO: Handle the response.
+    return res;
   });
 }
 
 async function editComment(postId, commentId, text) {
-  axios.post(`${api}/comment/${postId}/${commentId}`, {
-    text
-  })
+  fetch(`${api}/editComment`,
+    {
+      method: 'POST',
+      body: JSON.stringify({
+        postId,
+        commentId,
+        text,
+      }),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+        Accept: 'application/json; charset=UTF-8',
+      },
+    })
   .catch((err) => {
     // TODO: Handle the error.
   })
   .then((res) => {
-    // TODO: Handle the response.
+    return res;
   });
 }
 
-async function deleteComment(postId, commentId, text) {
-  axios.delete(`${api}/comment/${postId}/${commentId}`, {
-    text
-  })
+async function deleteComment(postId, commentId) {
+  fetch(`${api}/deleteComment`,
+    {
+      method: 'DELETE',
+      body: JSON.stringify({
+        postId,
+        commentId,
+      }),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+        Accept: 'application/json; charset=UTF-8',
+      },
+    })
   .catch((err) => {
     // TODO: Handle the error.
   })
   .then((res) => {
-    // TODO: Handle the response.
+    return res;
   });
 }

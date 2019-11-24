@@ -13,12 +13,10 @@ router.post('/follow', checkAuthenticated, async (req, res) => {
   try {
     const { usernameA } = req.user.username;
     const { followeesA } = req.user.followees;
-    const { usernameB } = req.body;
-    const { followersB } = req.body;
+    const { usernameB } = req.body.username;
 
     if (!followeesA.includes(usernameB)) {
       followeesA.push(usernameB);
-      followersB.push(usernameA);
 
       await User.findOneAndUpdate(
         { username: usernameA },
@@ -27,7 +25,7 @@ router.post('/follow', checkAuthenticated, async (req, res) => {
 
       await User.findOneAndUpdate(
         { username: usernameB },
-        { $set: { followers: followersB } },
+        { $push: { followers: usernameA } },
       );
     }
   } catch (err) {
@@ -43,12 +41,10 @@ router.delete('/unfollow', checkAuthenticated, async (req, res) => {
   try {
     const { usernameA } = req.user.username;
     const { followeesA } = req.user.followees;
-    const { usernameB } = req.body;
-    const { followersB } = req.body;
+    const { usernameB } = req.body.username;
 
     if (followeesA.includes(usernameB)) {
       followeesA.filter((username) => username === usernameB);
-      followersB.filter((username) => username === usernameA);
 
       await User.findOneAndUpdate(
         { username: usernameA },
@@ -57,7 +53,7 @@ router.delete('/unfollow', checkAuthenticated, async (req, res) => {
 
       await User.findOneAndUpdate(
         { username: usernameB },
-        { $set: { followers: followersB } },
+        { $pullAll: { followers: usernameA } },
       );
     }
   } catch (err) {
