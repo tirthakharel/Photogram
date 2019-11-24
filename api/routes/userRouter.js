@@ -5,7 +5,7 @@ const { checkAuthenticated } = require('../app');
 
 const router = express.Router();
 
-router.get('/user', checkAuthenticated, (req, res) => {
+router.get('/getUser', checkAuthenticated, (req, res) => {
   const { username } = req.body;
 
   User.findOne({ username })
@@ -36,7 +36,7 @@ router.get('/user', checkAuthenticated, (req, res) => {
     });
 });
 
-router.delete('/user', checkAuthenticated, (req, res) => {
+router.delete('/deleteUser', checkAuthenticated, (req, res) => {
   const usernameLoggedIn = req.user.username;
   const usernameToDelete = req.body.username;
 
@@ -60,7 +60,7 @@ router.delete('/user', checkAuthenticated, (req, res) => {
     });
 });
 
-router.get('/users', checkAuthenticated, (res) => {
+router.get('/getUsers', checkAuthenticated, (res) => {
   User.find({}, (usersInDatabase) => {
     const usersToSend = [];
 
@@ -74,11 +74,6 @@ router.get('/users', checkAuthenticated, (res) => {
       res.status(500);
       res.send(`[!] Could not retrieve users: ${err}`);
     });
-});
-
-router.delete('/logout', checkAuthenticated, (req, res) => {
-  req.logOut();
-  res.sendStatus(200);
 });
 
 module.exports = router;

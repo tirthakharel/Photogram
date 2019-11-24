@@ -4,14 +4,16 @@ const { checkAuthenticated } = require('../app');
 
 const router = express.Router();
 
+// TODO: Fix these routes so that all they require in body is a username.
+
 router.post('/follow', checkAuthenticated, async (req, res) => {
   // User A will follow User B
   // User A --[FOLLOW]--> User B
 
   try {
-    const { usernameA } = req.body;
+    const { usernameA } = req.user.username;
+    const { followeesA } = req.user.followees;
     const { usernameB } = req.body;
-    const { followeesA } = req.body;
     const { followersB } = req.body;
 
     if (!followeesA.includes(usernameB)) {
@@ -34,14 +36,14 @@ router.post('/follow', checkAuthenticated, async (req, res) => {
   }
 });
 
-router.post('/unfollow', checkAuthenticated, async (req, res) => {
+router.delete('/unfollow', checkAuthenticated, async (req, res) => {
   // User A will unfollow User B
   // User A --[UNFOLLOW]--> User B
 
   try {
-    const { usernameA } = req.body;
+    const { usernameA } = req.user.username;
+    const { followeesA } = req.user.followees;
     const { usernameB } = req.body;
-    const { followeesA } = req.body;
     const { followersB } = req.body;
 
     if (followeesA.includes(usernameB)) {

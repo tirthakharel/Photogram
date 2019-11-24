@@ -5,9 +5,9 @@ const { checkAuthenticated } = require('../app');
 
 const router = express.Router();
 
-router.post('/comment/:postId', checkAuthenticated, (req, res) => {
+router.post('/addComment', checkAuthenticated, (req, res) => {
   const { username } = req.user;
-  const { postId } = req.params;
+  const { postId } = req.body;
   const { text } = req.body;
 
   const comment = {
@@ -30,10 +30,10 @@ router.post('/comment/:postId', checkAuthenticated, (req, res) => {
     });
 });
 
-router.post('/comment/:postId/:commentId', checkAuthenticated, (req, res) => {
+router.post('/editComment', checkAuthenticated, (req, res) => {
   const { username } = req.user;
-  const { postId } = req.params;
-  const { commentId } = req.params;
+  const { postId } = req.body;
+  const { commentId } = req.body;
   const { text } = req.body;
 
   Post.findOneAndUpdate(
@@ -49,10 +49,10 @@ router.post('/comment/:postId/:commentId', checkAuthenticated, (req, res) => {
     });
 });
 
-router.delete('/comment/:postId/:commentId', checkAuthenticated, (req, res) => {
+router.delete('/deleteComment', checkAuthenticated, (req, res) => {
   const { username } = req.user;
-  const { postId } = req.params;
-  const { commentId } = req.params;
+  const { postId } = req.body;
+  const { commentId } = req.body;
 
   Post.findOneAndUpdate(
     { _id: ObjectId(postId) },

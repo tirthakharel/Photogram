@@ -5,6 +5,7 @@ const path = require('path');
 const User = require('../models/User');
 const { passport } = require('../app');
 const { parser } = require('../app');
+const { checkAuthenticated } = require('../app');
 const { checkNotAuthenticated } = require('../app');
 
 const router = express.Router();
@@ -88,5 +89,10 @@ router.post('/login', checkNotAuthenticated, passport.authenticate('local',
     res.status(400);
     res.send('[!] Invalid login credentials');
   }));
+
+router.delete('/logout', checkAuthenticated, (req, res) => {
+  req.logOut();
+  res.sendStatus(200);
+});
 
 module.exports = router;

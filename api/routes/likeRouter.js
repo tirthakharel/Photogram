@@ -6,9 +6,9 @@ const { checkAuthenticated } = require('../app');
 
 const router = express.Router();
 
-router.post('/like/:postId', checkAuthenticated, (req, res) => {
+router.post('/addLike', checkAuthenticated, (req, res) => {
   const { username } = req.user;
-  const { postId } = req.params;
+  const { postId } = req.body;
 
   Post.findOneAndUpdate(
     { _id: ObjectId(postId) },
@@ -33,9 +33,9 @@ router.post('/like/:postId', checkAuthenticated, (req, res) => {
     });
 });
 
-router.delete('/like/:postId', checkAuthenticated, (req, res) => {
+router.delete('/deleteLike', checkAuthenticated, (req, res) => {
   const { username } = req.user;
-  const { postId } = req.params;
+  const { postId } = req.body;
 
   Post.findOneAndUpdate(
     { _id: ObjectId(postId) },

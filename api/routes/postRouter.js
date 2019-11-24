@@ -15,7 +15,7 @@ const router = express.Router();
 //    3. Delete the image from the server-side file system.
 // Ideally, the app would skip #1 and #3, instead getting the bytes directly from the request.
 // However, #1 and #3 appear to be necessary, at least based on readily available documentation.
-router.post('/post', checkAuthenticated, parser.single('image'), (req, res) => {
+router.post('/addPost', checkAuthenticated, parser.single('image'), (req, res) => {
   let image;
 
   const { username } = req.user;
@@ -68,9 +68,9 @@ router.post('/post', checkAuthenticated, parser.single('image'), (req, res) => {
     });
 });
 
-router.post('/post/:postId', checkAuthenticated, (req, res) => {
+router.post('/editPost', checkAuthenticated, (req, res) => {
   const { username } = req.user;
-  const { postId } = req.params;
+  const { postId } = req.body;
   const { title } = req.body;
   const { description } = req.body;
 
@@ -87,7 +87,7 @@ router.post('/post/:postId', checkAuthenticated, (req, res) => {
     });
 });
 
-router.get('/post/:postId', checkAuthenticated, (req, res) => {
+router.get('/getPost/:postId', checkAuthenticated, (req, res) => {
   const { postId } = req.params;
 
   Post.findOne({ _id: ObjectId(postId) }, (postInDatabase) => {
@@ -111,9 +111,9 @@ router.get('/post/:postId', checkAuthenticated, (req, res) => {
     });
 });
 
-router.delete('/post/:postId', checkAuthenticated, (req, res) => {
+router.delete('/deletePost', checkAuthenticated, (req, res) => {
   const { username } = req.user;
-  const { postId } = req.params;
+  const { postId } = req.body;
 
   Post.deleteOne({ _id: ObjectId(postId), username })
     .then(() => {
