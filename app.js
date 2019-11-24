@@ -211,14 +211,14 @@ app.post('/register', checkNotAuthenticated, parser.single('image'), async (req,
     User.findOne({ email: incomingUser.email })
       .then((user) => {
         if (user) {
-          const message = encodeURIComponent('This email address is already in use');
-          res.redirect(`/register?error=${message}`);
+          res.status(400);
+          res.send('User already exists!');
         } else {
           User.findOne({ username: incomingUser.username })
             .then((userTwo) => {
               if (userTwo) {
-                const message = encodeURIComponent('This username is already in use');
-                res.redirect(`/register?error=${message}`);
+                res.status(400);
+                res.send('Username already exists!');
               } else {
                 if (req.file) {
                   let bytes;
@@ -227,7 +227,8 @@ app.post('/register', checkNotAuthenticated, parser.single('image'), async (req,
                     bytes = img.toString('base64');
                     fs.unlinkSync(req.file.path);
                   } catch (error) {
-                    res.redirect(`/register?error=${error}`);
+                    res.status(500);
+                    res.send('Internal processing error');
                   }
                   incomingUser.image = Buffer.from(bytes, 'base64');
                 }
@@ -250,13 +251,15 @@ app.post('/register', checkNotAuthenticated, parser.single('image'), async (req,
                   .then(() => {})
                   .catch((err) => console.log(err));
 
-                res.redirect('/login');
+                res.status(200);
+                res.end();
               }
             });
         }
       });
   } catch (error) {
-    res.redirect('/register');
+    res.status(400);
+    res.send(`${error}`);
   }
 });
 
