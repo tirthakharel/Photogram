@@ -15,7 +15,6 @@ class Registration extends Component {
             email: '',
             password: '',
         };
-        console.log(this.x)
     }
 
     handleChange = (e) => {

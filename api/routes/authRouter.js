@@ -1,7 +1,6 @@
 const bcrypt = require('bcryptjs');
 const express = require('express');
 const fs = require('fs');
-const path = require('path');
 const User = require('../models/User');
 const { passport } = require('../app');
 const { parser } = require('../app');

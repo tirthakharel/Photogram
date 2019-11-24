@@ -3,8 +3,11 @@
 
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import Registration from './components/Registration';
-import Login from './components/Login';
+import Login from './Login';
+import NavBar from './NavBar';
+import Post from './Post';
+import Profile from './Profile';
+import Registration from './Registration';
 
 class App extends Component {
   render() {
@@ -12,6 +15,9 @@ class App extends Component {
       <Router>
         <div className="App">
           <Route exact path="/login" component={Login} />
+          <Route exact path="/navBar" component={NavBar} />
+          <Route exact path="/post" component={Post} />
+          <Route exact path="/profile" component={Profile} />
           <Route exact path="/register" component={Registration} />
         </div>
       </Router>
