@@ -6,9 +6,7 @@ import { api } from '../api.js';
 class Registration extends Component {
     constructor(props) {
         super(props);
-        this.x = Math.random()
         this.state = { 
-            visibility: this.x,
             firstname: '',
             lastname: '',
             username: '',
@@ -55,8 +53,8 @@ class Registration extends Component {
     }
 
     render() {
-        if(this.state.visibility > 0.5){
         return (
+        <div class="uk-cover-container uk-background-secondary uk-flex uk-flex-center uk-flex-middle uk-height-viewport uk-overflow-hidden uk-light" data-uk-height-viewport>
             <div className ="uk-border-rounded uk-width-large uk-padding-large uk-position-z-index" uk-scrollspy="cls: uk-animation-fade" style={{backgroundColor: rgba(253, 253, 253, 0.253)}}>
                 <div className ="uk-text-center uk-margin"> <img src={require('../images/photogram.png')} alt="Logo"></img></div>
                 <h4 className ="uk-heading-line uk-text-center" style= {{color: rgba(255, 255, 255, .8)}}><span> Registration </span></h4>
@@ -106,11 +104,8 @@ class Registration extends Component {
                     </fieldset>
                 </form>
             </div>
+        </div>
         )
-    }
-    else{
-        return null;
-    }
     }
 }
 

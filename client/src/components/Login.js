@@ -21,6 +21,7 @@ class Login extends Component {
 
   render() {
     return (
+      <div class="uk-cover-container uk-background-secondary uk-flex uk-flex-center uk-flex-middle uk-height-viewport uk-overflow-hidden uk-light" data-uk-height-viewport>
           <div className="uk-border-rounded uk-width-large uk-padding-large uk-position-z-index" uk-scrollspy="cls: uk-animation-fade" style={{backgroundColor: rgba(253, 253, 253, 0.253)}}>
             <div className="uk-text-center uk-margin">
               <img src={require('../images/photogram.png')} alt="Logo"></img>
@@ -47,6 +48,7 @@ class Login extends Component {
               </fieldset>
             </form>
           </div>
+        </div>
     );
   }
 }
