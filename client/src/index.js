@@ -3,10 +3,10 @@ import ReactDOM from 'react-dom';
 import './stylesheets/index.css';
 import * as serviceWorker from './serviceWorker';
 
-import Registration from './Registration';
-import Post from './Post';
-import Profile from './Profile';
-import NavBar from './NavBar';
+import Registration from './components/Registration';
+import Post from './components/Post';
+import Profile from './components/Profile';
+import NavBar from './components/NavBar';
 
 
 ReactDOM.render(<NavBar />, document.getElementById('root'));

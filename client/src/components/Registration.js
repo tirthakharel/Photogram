@@ -45,7 +45,7 @@ class Registration extends Component {
     }
 
     callAPI() {
-        fetch("`${api.url}/testAPI`")
+        fetch(`${api.url}/testAPI`)
             .then(res => res.text())
             .then(res => this.setState({ visibility: 1-this.x }))
             .catch(err => err);

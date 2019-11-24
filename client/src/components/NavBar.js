@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { api } from './api.js'
+import { api } from '../api.js'
 
 class NavBar extends Component {
   constructor(props) {
@@ -24,7 +24,7 @@ class NavBar extends Component {
         <div className ="uk-container uk-container-small">
           <nav id = "navbar" data-uk-navbar = {{mode: "click"}}>
             <div className = "uk-navbar-left">
-              <a className = "uk-navbar-item uk-logo" href = "/feed"><img src = {require('./images/photogram.png')} alt="Logo" style={{width: "180px", height: "40px"}}></img></a>
+              <a className = "uk-navbar-item uk-logo" href = "/feed"><img src = {require('../images/photogram.png')} alt="Logo" style={{width: "180px", height: "40px"}}></img></a>
             </div>
             <div className="uk-navbar-right">
               <ul className="uk-navbar-nav">
@@ -38,7 +38,7 @@ class NavBar extends Component {
                   <a href={api.url + "demo"} data-uk-icon="icon:image"> </a>
                 </li>
                 <li>
-                  <a href={api.url + "demo"} data-uk-icon="icon:sign-out" uk-toggle> </a>
+                  <a href={api.url + "demo"} data-uk-icon="icon:sign-out" uk-toggle="true"> </a>
                 </li>
               </ul>
             </div>
