@@ -7,6 +7,7 @@ import Registration from './components/Registration';
 import Post from './components/Post';
 import Profile from './components/Profile';
 import NavBar from './components/NavBar';
+import Login from './components/Login';
 
 
 ReactDOM.render(<NavBar />, document.getElementById('root'));
