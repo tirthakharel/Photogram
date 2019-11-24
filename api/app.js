@@ -129,21 +129,6 @@ expressApp.use(passport.initialize());
 expressApp.use(passport.session());
 expressApp.use(methodOverride('_method'));
 
-// Catch 404 and forward to error handler.
-expressApp.use((req, res, next) => {
-  next(createError(404));
-});
-
-// Error handler.
-expressApp.use((err, req, res) => {
-  // Set locals, only providing error in development.
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // Render the error page.
-  res.sendStatus(err.status || 500);
-});
-
 // The routes depend on these exports, so export them first.
 module.exports = {
   checkAuthenticated,
