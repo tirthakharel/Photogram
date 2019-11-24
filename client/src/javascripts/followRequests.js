@@ -1,4 +1,4 @@
-import { api } from './api.js'
+import { api } from '../api.js'
 
 async function follow(username) {
   fetch(`${api}/follow`,
@@ -38,4 +38,9 @@ async function unfollow(username) {
   .then((res) => {
     return res;
   });
+}
+
+export {
+  follow,
+  unfollow,
 }

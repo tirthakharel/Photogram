@@ -1,4 +1,4 @@
-import { api } from './api.js'
+import { api } from '../api.js'
 
 async function register(firstName, lastName, email, password, username, file) {
   fetch(`${api}/register`,
@@ -61,4 +61,10 @@ async function logout() {
   .then((res) => {
     return res;
   });
+}
+
+export {
+  register,
+  login,
+  logout,
 }

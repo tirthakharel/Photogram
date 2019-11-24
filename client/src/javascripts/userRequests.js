@@ -1,4 +1,4 @@
-import { api } from './api.js'
+import { api } from '../api.js'
 
 async function getUser(title, description, file) {
   fetch(`${api}/getUser`,
@@ -53,3 +53,9 @@ async function deleteUser(username) {
       return res;
     });
   }
+
+export {
+  getUser,
+  deleteUser,
+  getUsers,
+}

@@ -1,4 +1,4 @@
-import { api } from './api.js'
+import { api } from '../api.js'
 
 async function testAPI() {
   fetch(`${api}/testAPI`,
@@ -15,4 +15,8 @@ async function testAPI() {
   .then((res) => {
     return res;
   });
+}
+
+export {
+  testAPI,
 }

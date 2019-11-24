@@ -1,4 +1,4 @@
-import { api } from './api.js'
+import { api } from '../api.js'
 
 async function addComment(postId, text) {
   fetch(`${api}/addComment`,
@@ -62,4 +62,10 @@ async function deleteComment(postId, commentId) {
   .then((res) => {
     return res;
   });
+}
+
+export {
+  addComment,
+  editComment,
+  deleteComment,
 }

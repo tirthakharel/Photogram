@@ -1,4 +1,4 @@
-import { api } from './api.js'
+import { api } from '../api.js'
 
 async function addLike(postId) {
   fetch(`${api}/addLike`,
@@ -39,3 +39,8 @@ async function deleteLike(postId) {
       return res;
     });
   }
+
+export {
+  addLike,
+  deleteLike,
+}

@@ -1,4 +1,4 @@
-import { api } from './api.js'
+import { api } from '../api.js'
 
 async function addPost(title, description, file) {
   fetch(`${api}/addPost`,
@@ -79,4 +79,11 @@ async function editPost(postId, title, description) {
     .then((res) => {
       return res;
     });
+  }
+
+  export {
+    addPost,
+    editPost,
+    getPost,
+    deletePost,
   }
