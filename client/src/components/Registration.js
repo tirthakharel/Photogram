@@ -19,8 +19,12 @@ class Registration extends Component {
         event.preventDefault();
         register(this.state.firstname, this.state.lastname, this.state.email, this.state.password, this.state.username)
             .then((res) => {
-                //todo
+                console.log(res);
+                // else: TODO
             })
+            .catch((err) => {
+                // TODO
+            });
     }
 
     handleChange = (event) => {

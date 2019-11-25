@@ -8,6 +8,7 @@ import NavBar from './NavBar';
 import Post from './Post';
 import Profile from './Profile';
 import Registration from './Registration';
+import RouteProtector from './auth/RouteProtector';
 
 class App extends Component {
   render() {
@@ -16,8 +17,8 @@ class App extends Component {
         <div className="App">
           <Route exact path="/login" component={Login} />
           <Route exact path="/navBar" component={NavBar} />
-          <Route exact path="/post" component={Post} />
-          <Route exact path="/profile" component={Profile} />
+          <RouteProtector exact path="/post" component={Post} />
+          <RouteProtector exact path="/profile" component={Profile} />
           <Route exact path="/register" component={Registration} />
         </div>
       </Router>

@@ -1,7 +1,6 @@
 import { api } from '../api.js'
 
 async function register(firstName, lastName, email, password, username, image='') {
-  console.log(firstName, lastName, email);
   fetch(`${api}/register`,
     {
       method: 'POST',
@@ -64,8 +63,19 @@ async function logout() {
   });
 }
 
+async function checkAuth() {
+  fetch(`${api}/isLoggedIn`)
+    .catch((err) => {
+      // TODO: handle the error.
+    })
+    .then((res) => {
+      return res;
+    });
+}
+
 export {
   register,
   login,
   logout,
+  checkAuth,
 }

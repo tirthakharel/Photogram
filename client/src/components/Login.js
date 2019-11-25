@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 import { rgba } from 'polished';
 import { api } from '../api.js';
 import { login } from '../javascripts/authRequests';
@@ -17,8 +18,13 @@ class Login extends Component {
     event.preventDefault();
     login(this.state.email, this.state.password)
         .then((res) => {
-            //todo redirect or something
+            if (res.ok) {
+              this.props.history.push('/post');
+            }
         })
+        .catch((err) => {
+          // TODO
+        });
   }
 
   handleChange = (event) => {

@@ -96,4 +96,12 @@ router.delete('/logout', checkAuthenticated, (req, res) => {
   res.sendStatus(200);
 });
 
+router.get('/isLoggedIn', (req, res) => {
+  if (req.isAuthenticated()) {
+    res.status(200).send('OK');
+  } else {
+    res.status(400).send('Not OK');
+  }
+});
+
 module.exports = router;
