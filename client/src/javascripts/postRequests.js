@@ -1,7 +1,7 @@
 import { api } from '../api.js'
 
 async function addPost(title, description, file) {
-  fetch(`${api}/addPost`,
+  fetch(`${api.url}/addPost`,
     {
       method: 'POST',
       body: JSON.stringify({
@@ -23,7 +23,7 @@ async function addPost(title, description, file) {
 }
 
 async function editPost(postId, title, description) {
-    fetch(`${api}/editPost`,
+    fetch(`${api.url}/editPost`,
       {
         method: 'POST',
         body: JSON.stringify({
@@ -45,7 +45,7 @@ async function editPost(postId, title, description) {
   }
 
   async function getPost(postId) {
-    fetch(`${api}/getPost/${postId}`,
+    fetch(`${api.url}/getPost/${postId}`,
       {
         method: 'GET',
         headers: {
@@ -62,7 +62,7 @@ async function editPost(postId, title, description) {
   }
   
   async function deletePost(postId) {
-    fetch(`${api}/deletePost`,
+    fetch(`${api.url}/deletePost`,
       {
         method: 'DELETE',
         body: JSON.stringify({

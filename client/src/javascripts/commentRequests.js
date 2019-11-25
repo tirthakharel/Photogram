@@ -1,7 +1,7 @@
 import { api } from '../api.js'
 
 async function addComment(postId, text) {
-  fetch(`${api}/addComment`,
+  fetch(`${api.url}/addComment`,
     {
       method: 'POST',
       body: JSON.stringify({
@@ -22,7 +22,7 @@ async function addComment(postId, text) {
 }
 
 async function editComment(postId, commentId, text) {
-  fetch(`${api}/editComment`,
+  fetch(`${api.url}/editComment`,
     {
       method: 'POST',
       body: JSON.stringify({
@@ -44,7 +44,7 @@ async function editComment(postId, commentId, text) {
 }
 
 async function deleteComment(postId, commentId) {
-  fetch(`${api}/deleteComment`,
+  fetch(`${api.url}/deleteComment`,
     {
       method: 'DELETE',
       body: JSON.stringify({

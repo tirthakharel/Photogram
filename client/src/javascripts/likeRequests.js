@@ -1,7 +1,7 @@
 import { api } from '../api.js'
 
 async function addLike(postId) {
-  fetch(`${api}/addLike`,
+  fetch(`${api.url}/addLike`,
     {
       method: 'POST',
       body: JSON.stringify({
@@ -21,7 +21,7 @@ async function addLike(postId) {
 }
 
 async function deleteLike(postId) {
-    fetch(`${api}/deleteLike`,
+    fetch(`${api.url}/deleteLike`,
       {
         method: 'DELETE',
         body: JSON.stringify({

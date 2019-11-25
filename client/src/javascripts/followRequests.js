@@ -1,7 +1,7 @@
 import { api } from '../api.js'
 
 async function follow(username) {
-  fetch(`${api}/follow`,
+  fetch(`${api.url}/follow`,
     {
       method: 'POST',
       body: JSON.stringify({
@@ -21,7 +21,7 @@ async function follow(username) {
 }
 
 async function unfollow(username) {
-  fetch(`${api}/unfollow`,
+  fetch(`${api.url}/unfollow`,
     {
       method: 'DELETE',
       body: JSON.stringify({

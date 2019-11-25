@@ -1,7 +1,7 @@
 import { api } from '../api.js'
 
 async function testAPI() {
-  fetch(`${api}/testAPI`,
+  fetch(`${api.url}/testAPI`,
     {
       method: 'GET',
       headers: {

@@ -23,7 +23,6 @@ router.post('/register', checkNotAuthenticated, parser.single('image'), async (r
     // Leave image undefined if the user does not upload a profile picture.
     // Handle undefined case on the client side.
     let image;
-    const userId = Date.now().toString();
 
     User.findOne({ email })
       .then((userFoundByEmail) => {
@@ -49,11 +48,12 @@ router.post('/register', checkNotAuthenticated, parser.single('image'), async (r
                     res.send(`[!] Could not read profile picture: ${err}`);
                   }
 
-                  image = Buffer.from(bytes, 'base64');
+                  if (bytes !== '') {
+                    image = Buffer.from(bytes, 'base64');
+                  }
                 }
 
                 const newUser = new User({
-                  _id: userId,
                   email,
                   username,
                   firstName,

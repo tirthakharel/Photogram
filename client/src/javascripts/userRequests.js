@@ -1,7 +1,7 @@
 import { api } from '../api.js'
 
 async function getUser(title, description, file) {
-  fetch(`${api}/getUser`,
+  fetch(`${api.url}/getUser`,
     {
       method: 'GET',
       headers: {
@@ -18,7 +18,7 @@ async function getUser(title, description, file) {
 }
 
 async function deleteUser(username) {
-    fetch(`${api}/deleteUser`,
+    fetch(`${api.url}/deleteUser`,
       {
         method: 'DELETE',
         body: JSON.stringify({
@@ -38,7 +38,7 @@ async function deleteUser(username) {
   }
 
   async function getUsers() {
-    fetch(`${api}/getUsers`,
+    fetch(`${api.url}/getUsers`,
       {
         method: 'GET',
         headers: {

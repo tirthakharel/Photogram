@@ -1,7 +1,7 @@
 import { api } from '../api.js'
 
 async function register(firstName, lastName, email, password, username, image='') {
-  fetch(`${api}/register`,
+  fetch(`${api.url}/register`,
     {
       method: 'POST',
       body: JSON.stringify({
@@ -26,7 +26,7 @@ async function register(firstName, lastName, email, password, username, image=''
 }
 
 async function login(email, password) {
-  fetch(`${api}/login`,
+  fetch(`${api.url}/login`,
     {
       method: 'POST',
       body: JSON.stringify({
@@ -47,7 +47,7 @@ async function login(email, password) {
 }
 
 async function logout() {
-  fetch(`${api}/logout`,
+  fetch(`${api.url}/logout`,
     {
       method: 'DELETE',
       headers: {
@@ -64,7 +64,7 @@ async function logout() {
 }
 
 async function checkAuth() {
-  fetch(`${api}/isLoggedIn`)
+  fetch(`${api.url}/isLoggedIn`)
     .catch((err) => {
       // TODO: handle the error.
     })
