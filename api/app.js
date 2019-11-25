@@ -26,7 +26,7 @@ mongoose.connect(process.env.DB_URL, {
   useUnifiedTopology: true,
 }, (err) => {
   if (err) {
-    console.log(`[!] Cound not connect to MongoDB Atlas: ${err}`);
+    console.log(`[!] Could not connect to MongoDB Atlas: ${err}`);
   } else {
     console.log('Connected to MongoDB Atlas');
   }

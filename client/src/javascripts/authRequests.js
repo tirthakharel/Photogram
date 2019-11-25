@@ -1,6 +1,7 @@
 import { api } from '../api.js'
 
-async function register(firstName, lastName, email, password, username, image) {
+async function register(firstName, lastName, email, password, username, image='') {
+  console.log(firstName, lastName, email);
   fetch(`${api}/register`,
     {
       method: 'POST',
