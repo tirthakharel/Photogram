@@ -37,10 +37,10 @@ class NavBar extends Component {
                   <a href={`${api.url}/testAPI`} data-uk-icon="icon:heart"> </a>
                 </li>
                 <li>
-                  <a href={`${api.url}/testAPI`} data-uk-icon="icon:user"> </a>
+                  <a href={'/profile'} data-uk-icon="icon:user"> </a>
                 </li>
                 <li>
-                  <a href={`${api.url}/testAPI`} data-uk-icon="icon:image"> </a>
+                  <a href={'/makePost'} data-uk-icon="icon:image"> </a>
                 </li>
                 <li>
                   <a href={`${api.url}/testAPI`} data-uk-icon="icon:sign-out" uk-toggle="true"> </a>

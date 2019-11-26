@@ -29,7 +29,7 @@ class MakePost extends Component {
   render() {
     if(this.state.visibility){
       return (
-    <div className="uk-cover-container uk-background-secondary uk-flex uk-flex-center uk-flex-middle uk-height-viewport uk-overflow-hidden uk-light" data-uk-height-viewport>
+    <div className="uk-cover-container uk-flex uk-flex-center uk-flex-middle uk-height-viewport" data-uk-height-viewport>
         <fieldset className="uk-fieldset">
             <h3>Create Post</h3>
               <div className="">
@@ -52,7 +52,7 @@ class MakePost extends Component {
                     <label htmlFor="image" className="uk-form-label uk-text-large">Select an image to upload:</label>
                     <input id="image" className="uk-input uk-form-width-xxlarge" type="file" name="image" accept="image/*"></input>
                 </div>
-                <input type="submit" className= "uk-button-primary" value="Upload"></input>
+                <input type="submit" className= "uk-button-primary uk-button-medium uk-text-large" value="Upload"></input>
             </fieldset>
         </div> 
             )
