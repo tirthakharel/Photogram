@@ -1,22 +1,28 @@
 /* globals fetch */
-
-
-// Need to edit
 import React, { Component } from 'react';
 import { api } from '../api';
 
 const testData = {
-    postBy: 'Yiwen123',
-    title: 'testTitle',
-    description: 'I love mountains!',
-    // FIXME: Profile Image Missing!!
+    postID: 'abcd',
+    comments: [{
+      mentions: ['Jeff'],
+      username: 'Nick1',
+      text: "I like it!"
+    },{
+      mentions: ['Jack'],
+      username: 'Nick2',
+      text: "I love it!"
+    }]
   };
 
-class Comment extends Component {
+class Comments extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { apiResponse: '' };
+    this.state = { 
+      data: testData,
+      apiResponse: '' 
+    };
 
     this.callAPI = this.callAPI.bind(this);
   }
@@ -33,45 +39,30 @@ class Comment extends Component {
   }
 
   render() {
+    const {data} = this.state;
+    const comments = data.comments.map((comment) => { return(
+        <article className="uk-comment-primary uk-visible-toggle uk-box-shadow-hover-small" tabindex="-1">
+          <header className="uk-comment-header uk-position-relative">
+              <div className="uk-grid-medium uk-flex-middle" uk-grid>
+                  <div className="uk-width-expand">
+                      <h5 className="uk-comment-title uk-margin-remove"><a class="uk-link" href="#">{comment.username}</a></h5>
+                  </div>
+              </div>
+              <div class="uk-position-top-right uk-position-small uk-hidden-hover"><a class="uk-link-muted" href="#">Delete</a></div>  
+          </header>
+        <div className="uk-comment-body">
+      <p className = "uk-text-large">{comment.text}</p>
+    </div>
+  </article>
+  )});
     return (
       <div className="uk-container uk-container-small">
-        <div id="cards" className="uk-child-width-1-2@m uk-align-center uk-background-default">
-          <div className="uk-card uk-card-default uk-card-hover uk-align-center" uk-scrollspy="cls: uk-animation-slide-left; repeat: true">
-            <h3 className="uk-card-title uk-text-left-medium">Post Title</h3>
-            <div className="uk-card-media-top">
-              <img src={require('../images/photogram.png')} alt="" />
-            </div>
-            <div className="uk-card-body">
-              <h3 className="uk-card-title uk-text-small">
-                Posted by
-                {' '}
-                <a href="">Somebody</a>
-              </h3>
-              <p id="">I Love Mountains...</p>
-              <a href="" uk-icon="heart" />
-              <a href="" uk-icon="comments" />
-            </div>
-          </div>
-          <div className="uk-card uk-card-default uk-card-hover uk-align-center" uk-scrollspy="cls: uk-animation-slide-left; repeat: true">
-            <h3 className="uk-card-title uk-text-left-medium">Post Title</h3>
-            <div className="uk-card-media-top">
-              <img src={require('../images/photogram.png')} alt="" />
-            </div>
-            <div className="uk-card-body">
-              <h3 className="uk-card-title uk-text-small">
-                Posted by
-                {' '}
-                <a href="">Somebody</a>
-              </h3>
-              <p id="">I Love Mountains...</p>
-              <a href="" uk-icon="heart" />
-              <a href="" uk-icon="comments" />
-            </div>
-          </div>
-        </div>
+        <textarea className="uk-textarea" placeholder="Reply"></textarea>
+        <button type="submit" className="uk-button uk-button-primary uk-border uk-width-1-1" id="submit">Sumbit</button>
+        {comments}
       </div>
     );
   }
 }
 
-export default Post;
+export default Comments;

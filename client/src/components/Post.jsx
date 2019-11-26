@@ -6,7 +6,10 @@ import { api } from '../api';
 const testData = {
   postBy: 'Yiwen123',
   title: 'testTitle',
+  tags: ['Cloud', 'Japan'],
+  likes:['Tom','Jerry'],
   description: 'I love mountains!',
+  image: ""
   // FIXME: Profile Image Missing!!
 };
 
@@ -34,11 +37,15 @@ class Post extends Component {
 
   render() {
     const {data} = this.state;
+    const tags = data.tags.map((tag) => {return(
+      <span class="uk-label uk-margin-bottom">{tag}</span>
+    )});
     return (
       <div className="uk-container uk-container-small">
         <div id="cards" className="uk-child-width-1-2@m uk-align-center uk-background-default">
           <div className="uk-card uk-card-default uk-card-hover uk-align-center" uk-scrollspy="cls: uk-animation-slide-left; repeat: true">
             <h3 className="uk-card-title uk-text-left-medium">{data.title}</h3>
+              {tags}
             <div className="uk-card-media-top">
               <img src={require('../images/photogram.png')} alt="" />
             </div>
@@ -49,7 +56,6 @@ class Post extends Component {
               </h3>
               <p id="">{data.description}</p>
               <a href="" uk-icon="heart" />
-              <a href="" uk-icon="comments" />
             </div>
           </div>
         </div>
