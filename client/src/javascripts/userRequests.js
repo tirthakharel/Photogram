@@ -1,61 +1,45 @@
-import { api } from '../api.js'
+/* globals fetch */
 
-async function getUser(title, description, file) {
-  fetch(`${api.url}/getUser`,
+import { api } from '../api';
+
+async function getUser() {
+  return fetch(`${api.url}/getUser`,
     {
       method: 'GET',
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
         Accept: 'application/json; charset=UTF-8',
       },
-    })
-  .catch((err) => {
-    // TODO: Handle the error.
-  })
-  .then((res) => {
-    return res;
-  });
+    });
 }
 
 async function deleteUser(username) {
-    fetch(`${api.url}/deleteUser`,
-      {
-        method: 'DELETE',
-        body: JSON.stringify({
-          username,
-        }),
-        headers: {
-          'Content-type': 'application/json; charset=UTF-8',
-          Accept: 'application/json; charset=UTF-8',
-        },
-      })
-    .catch((err) => {
-      // TODO: Handle the error.
-    })
-    .then((res) => {
-      return res;
+  return fetch(`${api.url}/deleteUser`,
+    {
+      method: 'DELETE',
+      body: JSON.stringify({
+        username,
+      }),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+        Accept: 'application/json; charset=UTF-8',
+      },
     });
-  }
+}
 
-  async function getUsers() {
-    fetch(`${api.url}/getUsers`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-type': 'application/json; charset=UTF-8',
-          Accept: 'application/json; charset=UTF-8',
-        },
-      })
-    .catch((err) => {
-      // TODO: Handle the error.
-    })
-    .then((res) => {
-      return res;
+async function getUsers() {
+  return fetch(`${api.url}/getUsers`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+        Accept: 'application/json; charset=UTF-8',
+      },
     });
-  }
+}
 
 export {
   getUser,
   deleteUser,
   getUsers,
-}
+};

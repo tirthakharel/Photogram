@@ -82,14 +82,19 @@ router.post('/register', checkNotAuthenticated, parser.single('image'), async (r
   }
 });
 
-router.post('/login', checkNotAuthenticated, passport.authenticate('local',
-  (req, res) => {
-    res.sendStatus(200);
-  },
-  (req, res) => {
-    res.status(400);
-    res.send('[!] Invalid login credentials');
-  }));
+router.post('/login', checkNotAuthenticated, passport.authenticate('local', {
+  successRedirect: '/succeed',
+  failureRedirect: '/fail',
+  failureFlash: true,
+}));
+
+router.get('/succeed', (req, res) => {
+  res.status(200);
+});
+
+router.get('/fail', (req, res) => {
+  res.status(401);
+});
 
 router.delete('/logout', checkAuthenticated, (req, res) => {
   req.logOut();
@@ -98,9 +103,9 @@ router.delete('/logout', checkAuthenticated, (req, res) => {
 
 router.get('/isLoggedIn', (req, res) => {
   if (req.isAuthenticated()) {
-    res.status(200).send('OK');
+    res.sendStatus(200);
   } else {
-    res.status(400).send('Not OK');
+    res.sendStatus(401);
   }
 });
 

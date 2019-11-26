@@ -1,22 +1,18 @@
-import { api } from '../api.js'
+/* globals fetch */
+
+import { api } from '../api';
 
 async function testAPI() {
-  fetch(`${api.url}/testAPI`,
+  return fetch(`${api.url}/testAPI`,
     {
       method: 'GET',
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
         Accept: 'application/json; charset=UTF-8',
       },
-    })
-  .catch((err) => {
-    // TODO: Handle the error.
-  })
-  .then((res) => {
-    return res;
-  });
+    });
 }
 
 export {
   testAPI,
-}
+};

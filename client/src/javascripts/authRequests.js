@@ -1,7 +1,9 @@
-import { api } from '../api.js'
+/* globals fetch */
 
-async function register(firstName, lastName, email, password, username, image='') {
-  fetch(`${api.url}/register`,
+import { api } from '../api';
+
+async function register(firstName, lastName, email, password, username, image = '') {
+  return fetch(`${api.url}/register`,
     {
       method: 'POST',
       body: JSON.stringify({
@@ -16,17 +18,11 @@ async function register(firstName, lastName, email, password, username, image=''
         'Content-type': 'application/json; charset=UTF-8',
         Accept: 'application/json; charset=UTF-8',
       },
-    })
-  .catch((err) => {
-    // TODO: Handle the error.
-  })
-  .then((res) => {
-    return res;
-  });
+    });
 }
 
 async function login(email, password) {
-  fetch(`${api.url}/login`,
+  return fetch(`${api.url}/login`,
     {
       method: 'POST',
       body: JSON.stringify({
@@ -37,40 +33,24 @@ async function login(email, password) {
         'Content-type': 'application/json; charset=UTF-8',
         Accept: 'application/json; charset=UTF-8',
       },
-    })
-  .catch((err) => {
-    // TODO: Handle the error.
-  })
-  .then((res) => {
-    return res;
-  });
+    });
 }
 
 async function logout() {
-  fetch(`${api.url}/logout`,
+  return fetch(`${api.url}/logout`,
     {
       method: 'DELETE',
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
         Accept: 'application/json; charset=UTF-8',
       },
-    })
-  .catch((err) => {
-    // TODO: Handle the error.
-  })
-  .then((res) => {
-    return res;
-  });
+    });
 }
 
 async function checkAuth() {
-  fetch(`${api.url}/isLoggedIn`)
-    .catch((err) => {
-      // TODO: handle the error.
-    })
-    .then((res) => {
-      return res;
-    });
+  return fetch(`${api.url}/isLoggedIn`)
+    .catch((err) => Promise.reject(err))
+    .then((res) => res);
 }
 
 export {
@@ -78,4 +58,4 @@ export {
   login,
   logout,
   checkAuth,
-}
+};

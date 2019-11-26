@@ -51,8 +51,8 @@ const parser = multer({ storage });
  * Passport initialization.
  */
 passport.use(
-  new LocalStrategy({ usernameField: 'email' }, (userEmail, password, done) => {
-    User.findOne({ email: userEmail })
+  new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
+    User.findOne({ email })
       .then((user) => {
         if (!user) {
           return done(null, false, { message: 'No user with that email' });
@@ -69,8 +69,6 @@ passport.use(
 
           return done(null, false, { message: 'Incorrect password' });
         });
-
-        return done(null, false, { message: 'Incorrect password' });
       })
       .catch((err) => done(err));
   }),

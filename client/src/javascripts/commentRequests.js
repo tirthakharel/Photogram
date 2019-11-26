@@ -1,7 +1,9 @@
-import { api } from '../api.js'
+/* globals fetch */
+
+import { api } from '../api';
 
 async function addComment(postId, text) {
-  fetch(`${api.url}/addComment`,
+  return fetch(`${api.url}/addComment`,
     {
       method: 'POST',
       body: JSON.stringify({
@@ -12,17 +14,11 @@ async function addComment(postId, text) {
         'Content-type': 'application/json; charset=UTF-8',
         Accept: 'application/json; charset=UTF-8',
       },
-    })
-  .catch((err) => {
-    // TODO: Handle the error.
-  })
-  .then((res) => {
-    return res;
-  });
+    });
 }
 
 async function editComment(postId, commentId, text) {
-  fetch(`${api.url}/editComment`,
+  return fetch(`${api.url}/editComment`,
     {
       method: 'POST',
       body: JSON.stringify({
@@ -34,17 +30,11 @@ async function editComment(postId, commentId, text) {
         'Content-type': 'application/json; charset=UTF-8',
         Accept: 'application/json; charset=UTF-8',
       },
-    })
-  .catch((err) => {
-    // TODO: Handle the error.
-  })
-  .then((res) => {
-    return res;
-  });
+    });
 }
 
 async function deleteComment(postId, commentId) {
-  fetch(`${api.url}/deleteComment`,
+  return fetch(`${api.url}/deleteComment`,
     {
       method: 'DELETE',
       body: JSON.stringify({
@@ -55,17 +45,11 @@ async function deleteComment(postId, commentId) {
         'Content-type': 'application/json; charset=UTF-8',
         Accept: 'application/json; charset=UTF-8',
       },
-    })
-  .catch((err) => {
-    // TODO: Handle the error.
-  })
-  .then((res) => {
-    return res;
-  });
+    });
 }
 
 export {
   addComment,
   editComment,
   deleteComment,
-}
+};

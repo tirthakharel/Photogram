@@ -1,7 +1,9 @@
-import { api } from '../api.js'
+/* globals fetch */
+
+import { api } from '../api';
 
 async function addPost(title, description, file) {
-  fetch(`${api.url}/addPost`,
+  return fetch(`${api.url}/addPost`,
     {
       method: 'POST',
       body: JSON.stringify({
@@ -13,77 +15,53 @@ async function addPost(title, description, file) {
         'Content-type': 'application/json; charset=UTF-8',
         Accept: 'application/json; charset=UTF-8',
       },
-    })
-  .catch((err) => {
-    // TODO: Handle the error.
-  })
-  .then((res) => {
-    return res;
-  });
+    });
 }
 
 async function editPost(postId, title, description) {
-    fetch(`${api.url}/editPost`,
-      {
-        method: 'POST',
-        body: JSON.stringify({
-          postId,
-          title,
-          description,
-        }),
-        headers: {
-          'Content-type': 'application/json; charset=UTF-8',
-          Accept: 'application/json; charset=UTF-8',
-        },
-      })
-    .catch((err) => {
-      // TODO: Handle the error.
-    })
-    .then((res) => {
-      return res;
+  return fetch(`${api.url}/editPost`,
+    {
+      method: 'POST',
+      body: JSON.stringify({
+        postId,
+        title,
+        description,
+      }),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+        Accept: 'application/json; charset=UTF-8',
+      },
     });
-  }
+}
 
-  async function getPost(postId) {
-    fetch(`${api.url}/getPost/${postId}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-type': 'application/json; charset=UTF-8',
-          Accept: 'application/json; charset=UTF-8',
-        },
-      })
-    .catch((err) => {
-      // TODO: Handle the error.
-    })
-    .then((res) => {
-      return res;
+async function getPost(postId) {
+  return fetch(`${api.url}/getPost/${postId}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+        Accept: 'application/json; charset=UTF-8',
+      },
     });
-  }
-  
-  async function deletePost(postId) {
-    fetch(`${api.url}/deletePost`,
-      {
-        method: 'DELETE',
-        body: JSON.stringify({
-          postId,
-        }),
-        headers: {
-          'Content-type': 'application/json; charset=UTF-8',
-          Accept: 'application/json; charset=UTF-8',
-        },
-      })
-    .catch((err) => {
-      // TODO: Handle the error.
-    })
-    .then((res) => {
-      return res;
-    });
-  }
+}
 
-  export {
-    addPost,
-    editPost,
-    getPost,
-    deletePost,
-  }
+async function deletePost(postId) {
+  return fetch(`${api.url}/deletePost`,
+    {
+      method: 'DELETE',
+      body: JSON.stringify({
+        postId,
+      }),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+        Accept: 'application/json; charset=UTF-8',
+      },
+    });
+}
+
+export {
+  addPost,
+  editPost,
+  getPost,
+  deletePost,
+};

@@ -6,14 +6,11 @@ const authState = {
       .then((res) => {
         if (res.ok) {
           return true;
-        } else {
-          return false;
         }
-      })
-      .catch(() => {
         return false;
-      });
-  }
-}
+      })
+      .catch(() => false);
+  },
+};
 
 export default authState;
