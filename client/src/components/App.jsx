@@ -10,7 +10,6 @@ import Profile from './Profile';
 import Register from './Register';
 import MakePost from './MakePost';
 import RouteProtector from './RouteProtector';
-import RouteProtector from './RouteProtector';
 
 
 class App extends PureComponent {
