@@ -95,7 +95,7 @@ router.delete('/logout', checkAuthenticated, (req, res) => {
   res.sendStatus(200);
 });
 
-router.get('/isLoggedIn', (req, res) => {
+router.get('/checkAuth', (req, res) => {
   if (req.isAuthenticated()) {
     res.sendStatus(200);
   } else {

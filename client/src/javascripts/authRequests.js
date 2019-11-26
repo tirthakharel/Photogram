@@ -18,6 +18,8 @@ async function register(firstName, lastName, email, password, username, image = 
         'Content-type': 'application/json; charset=UTF-8',
         Accept: 'application/json; charset=UTF-8',
       },
+      credentials: 'include',
+      mode: 'cors',
     });
 }
 
@@ -33,6 +35,8 @@ async function login(email, password) {
         'Content-type': 'application/json; charset=UTF-8',
         Accept: 'application/json; charset=UTF-8',
       },
+      credentials: 'include',
+      mode: 'cors',
     });
 }
 
@@ -44,13 +48,22 @@ async function logout() {
         'Content-type': 'application/json; charset=UTF-8',
         Accept: 'application/json; charset=UTF-8',
       },
+      credentials: 'include',
+      mode: 'cors',
     });
 }
 
 async function checkAuth() {
-  return fetch(`${api.url}/isLoggedIn`)
-    .catch((err) => Promise.reject(err))
-    .then((res) => res);
+  return fetch(`${api.url}/checkAuth`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+        Accept: 'application/json; charset=UTF-8',
+      },
+      credentials: 'include',
+      mode: 'cors',
+    });
 }
 
 export {

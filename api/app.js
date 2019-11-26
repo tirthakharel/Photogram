@@ -1,11 +1,10 @@
 /* eslint-disable no-underscore-dangle */
-const createError = require('http-errors');
+const bcrypt = require('bcryptjs');
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
-const bcrypt = require('bcryptjs');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const flash = require('express-flash');
@@ -50,29 +49,29 @@ const parser = multer({ storage });
 /**
  * Passport initialization.
  */
-passport.use(
-  new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
-    User.findOne({ email })
-      .then((user) => {
-        if (!user) {
-          return done(null, false, { message: 'No user with that email' });
+const strategy = new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
+  User.findOne({ email })
+    .then((user) => {
+      if (!user) {
+        return done(null, false, { message: 'No user with that email' });
+      }
+
+      bcrypt.compare(password, user.password, (err, same) => {
+        if (err) {
+          throw err;
         }
 
-        bcrypt.compare(password, user.password, (err, same) => {
-          if (err) {
-            throw err;
-          }
+        if (same) {
+          return done(null, user);
+        }
 
-          if (same) {
-            return done(null, user);
-          }
+        return done(null, false, { message: 'Incorrect password' });
+      });
+    })
+    .catch((err) => done(err));
+});
 
-          return done(null, false, { message: 'Incorrect password' });
-        });
-      })
-      .catch((err) => done(err));
-  }),
-);
+passport.use(strategy);
 
 passport.serializeUser((user, done) => {
   done(null, user._id);
@@ -108,7 +107,6 @@ function checkNotAuthenticated(req, res, next) {
  */
 const expressApp = express();
 
-expressApp.use(cors());
 expressApp.use(bodyParser.json());
 expressApp.use(bodyParser.urlencoded({ extended: true }));
 expressApp.use(express.urlencoded({ extended: false }));
@@ -120,11 +118,16 @@ expressApp.use(session({
   saveUninitialized: false,
 }));
 expressApp.use(express.json());
-expressApp.use(cookieParser());
 expressApp.use(express.static(path.join(__dirname, 'public')));
 expressApp.use(passport.initialize());
 expressApp.use(passport.session());
 expressApp.use(methodOverride('_method'));
+expressApp.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  next();
+});
 
 // The routes depend on these exports, so export them first.
 module.exports = {
@@ -134,6 +137,19 @@ module.exports = {
   passport,
   parser,
 };
+
+/*
+expressApp.use((req, res, next) => {
+  console.log('req.session', req.session);
+  next();
+});
+
+expressApp.post('/login', (req, res) => {
+  console.log(req.headers.cookie);
+  req.session.username = req.body.email;
+  res.end();
+});
+*/
 
 expressApp.use(require('./routes/authRouter'));
 expressApp.use(require('./routes/commentRouter'));

@@ -15,6 +15,8 @@ async function addPost(title, description, file) {
         'Content-type': 'application/json; charset=UTF-8',
         Accept: 'application/json; charset=UTF-8',
       },
+      credentials: 'include',
+      mode: 'cors',
     });
 }
 
@@ -31,6 +33,8 @@ async function editPost(postId, title, description) {
         'Content-type': 'application/json; charset=UTF-8',
         Accept: 'application/json; charset=UTF-8',
       },
+      credentials: 'include',
+      mode: 'cors',
     });
 }
 
@@ -42,6 +46,8 @@ async function getPost(postId) {
         'Content-type': 'application/json; charset=UTF-8',
         Accept: 'application/json; charset=UTF-8',
       },
+      credentials: 'include',
+      mode: 'cors',
     });
 }
 
@@ -56,6 +62,8 @@ async function deletePost(postId) {
         'Content-type': 'application/json; charset=UTF-8',
         Accept: 'application/json; charset=UTF-8',
       },
+      credentials: 'include',
+      mode: 'cors',
     });
 }
 

@@ -10,6 +10,8 @@ async function getUser() {
         'Content-type': 'application/json; charset=UTF-8',
         Accept: 'application/json; charset=UTF-8',
       },
+      credentials: 'include',
+      mode: 'cors',
     });
 }
 
@@ -24,6 +26,8 @@ async function deleteUser(username) {
         'Content-type': 'application/json; charset=UTF-8',
         Accept: 'application/json; charset=UTF-8',
       },
+      credentials: 'include',
+      mode: 'cors',
     });
 }
 
@@ -35,6 +39,8 @@ async function getUsers() {
         'Content-type': 'application/json; charset=UTF-8',
         Accept: 'application/json; charset=UTF-8',
       },
+      credentials: 'include',
+      mode: 'cors',
     });
 }
 
