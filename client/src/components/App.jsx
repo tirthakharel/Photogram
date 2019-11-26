@@ -8,7 +8,9 @@ import NavBar from './NavBar';
 import Post from './Post';
 import Profile from './Profile';
 import Register from './Register';
-import RouteProtector from './auth/RouteProtector';
+import MakePost from './MakePost';
+import RouteProtector from './RouteProtector';
+
 
 class App extends PureComponent {
   render() {
@@ -18,8 +20,9 @@ class App extends PureComponent {
           <Route exact path="/" component={Login} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/navBar" component={NavBar} />
-          <RouteProtector exact path="/post" component={Post} />
-          <Route exact path="/profile" component={Profile} />
+          <Route exact path="/makePost" component={RouteProtecter(MakePost)} />
+          <Route exact path="/post" component={RouteProtector(Post)} />
+          <Route exact path="/profile" component={RouteProtector(Profile)} />
           <Route exact path="/register" component={Register} />
         </div>
       </Router>
