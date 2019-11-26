@@ -19,7 +19,7 @@ class App extends PureComponent {
           <Route exact path="/login" component={Login} />
           <Route exact path="/navBar" component={NavBar} />
           <RouteProtector exact path="/post" component={Post} />
-          <RouteProtector exact path="/profile" component={Profile} />
+          <Route exact path="/profile" component={Profile} />
           <Route exact path="/register" component={Register} />
         </div>
       </Router>

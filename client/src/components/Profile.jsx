@@ -9,7 +9,7 @@ const testData = {
   username: 'Yiwen123',
   posts: ['1', '2'],
   followers: ['John', 'Jack'],
-  followees: ['Tom', 'Jerry'],
+  followees: ['Tom', 'Jerry', 'Nick'],
   isSelf: true,
   // FIXME: Profile Image Missing!!
 };
@@ -19,7 +19,7 @@ class Profile extends Component {
     super(props);
 
     this.state = {
-      testData,
+      data: testData,
       apiResponse: '',
     };
 
@@ -52,9 +52,9 @@ class Profile extends Component {
               <h1 id="username" className="uk-text-light uk-margin-remove uk-heading-xsmall">{data.username}</h1>
               {isSelf && <a className="uk-button uk-button-default uk-margin-right uk-margin-small" style={{ height: '40px', width: '120px' }} href="#follow">Follow</a>}
               <span className="uk-margin-small">
-                <h5 id="followers" className="uk-text-bold">{`Follower: ${(data.followerArr).length}`}</h5>
-                <h5 id="following" className="uk-text-bold">{`Followee: ${(data.followerArr).length}`}</h5>
-                <h5 id="name" className="uk-text-bold">{`Name: ${data.name}`}</h5>
+                <h5 id="followers" className="uk-text-bold">{`Follower: ${(data.followers).length}`}</h5>
+                <h5 id="following" className="uk-text-bold">{`Followee: ${(data.followees).length}`}</h5>
+                <h5 id="name" className="uk-text-bold">{`Name: ${data.firstName + " " + data.lastName}`}</h5>
               </span>
             </div>
           </div>
