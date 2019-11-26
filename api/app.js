@@ -138,19 +138,6 @@ module.exports = {
   parser,
 };
 
-/*
-expressApp.use((req, res, next) => {
-  console.log('req.session', req.session);
-  next();
-});
-
-expressApp.post('/login', (req, res) => {
-  console.log(req.headers.cookie);
-  req.session.username = req.body.email;
-  res.end();
-});
-*/
-
 expressApp.use(require('./routes/authRouter'));
 expressApp.use(require('./routes/commentRouter'));
 expressApp.use(require('./routes/followRouter'));

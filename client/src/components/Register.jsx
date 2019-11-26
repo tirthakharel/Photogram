@@ -41,6 +41,8 @@ class Register extends Component {
   handleSubmit(event) {
     event.preventDefault();
 
+    const { history } = this.props;
+
     const { firstName } = this.state;
     const { lastName } = this.state;
     const { email } = this.state;
@@ -55,11 +57,12 @@ class Register extends Component {
       username,
     )
       .then((res) => {
-        console.log(res);
-        // else: TODO
+        if (res.ok) {
+          history.push('/post');
+        }
       })
       .catch((err) => {
-        // TODO
+        console.log(err);
       });
   }
 

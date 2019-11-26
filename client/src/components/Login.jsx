@@ -38,9 +38,10 @@ class Login extends Component {
   handleSubmit(event) {
     event.preventDefault();
 
+    const { history } = this.props;
+
     const { email } = this.state;
     const { password } = this.state;
-    const { history } = this.state;
 
     login(email, password)
       .then((res) => {
@@ -49,7 +50,7 @@ class Login extends Component {
         }
       })
       .catch((err) => {
-        // TODO
+        console.log(err);
       });
   }
 
