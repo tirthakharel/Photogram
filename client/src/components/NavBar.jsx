@@ -18,7 +18,6 @@ class NavBar extends Component {
 
   callAPI() {
     fetch(`${api.url}/testAPI`)
-      .then((res) => res.text())
       .then((res) => this.setState({ apiResponse: res }))
       .catch((err) => err);
   }
@@ -29,7 +28,7 @@ class NavBar extends Component {
         <div className="uk-container uk-container-small">
           <nav id="navbar" data-uk-navbar={{ mode: 'click' }}>
             <div className="uk-navbar-left">
-              <a className="uk-navbar-item uk-logo" href="/post"><img src={require('../images/photogram.png')} alt="Logo" style={{ width: '180px', height: '40px' }} /></a>
+              <a className="uk-navbar-item uk-logo" href="/"><img src={require('../images/photogram.png')} alt="Logo" style={{ width: '180px', height: '40px' }} /></a>
             </div>
             <div className="uk-navbar-right">
               <ul className="uk-navbar-nav">

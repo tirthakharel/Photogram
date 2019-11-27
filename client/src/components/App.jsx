@@ -4,8 +4,7 @@
 import React, { PureComponent } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Login from './Login';
-import NavBar from './NavBar';
-import Post from './Post';
+import Feed from './Feed';
 import Profile from './Profile';
 import Register from './Register';
 import MakePost from './MakePost';
@@ -20,9 +19,8 @@ class App extends PureComponent {
       <Router>
         <div className="App">
           <Route exact path="/login" component={RouteVerifier(Login)} />
-          <Route exact path="/navBar" component={NavBar} />
           <Route exact path="/makePost" component={RouteProtector(MakePost)} />
-          <Route exact path="/" component={RouteProtector(Post)} />
+          <Route exact path="/" component={RouteProtector(Feed)} />
           <Route exact path="/profile" component={RouteProtector(Profile)} />
           <Route exact path="/comments" component={RouteProtector(Comments)} />
           <Route exact path="/register" component={RouteVerifier(Register)} />

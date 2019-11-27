@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 import { api } from '../api';
+import NavBar from './NavBar';
 
 const testData = {
   firstName: 'Yiwen',
@@ -32,7 +33,6 @@ class Profile extends Component {
 
   callAPI() {
     fetch(`${api.url}/testAPI`)
-      .then((res) => res.text())
       .then((res) => this.setState({ apiResponse: res }))
       .catch((err) => err);
   }
@@ -42,20 +42,23 @@ class Profile extends Component {
     const { isSelf } = data;
 
     return (
-      <div className="uk-flex uk-flex-center uk-background-default">
-        <div className="uk-container uk-container-small">
-          <div className="uk-grid" uk-grid>
-            <div className="uk-width-1-3 uk-flex uk-flex-middle uk-flex-center">
-              <img className="uk-border-pill" style={{ height: '150px', width: '150px' }} id="profile-image" src={require('../images/photogram.png')} alt="" />
-            </div>
-            <div className="uk-width-expand uk-padding-small uk-flex uk-flex-column">
-              <h1 id="username" className="uk-text-light uk-margin-remove uk-heading-xsmall">{data.username}</h1>
-              {isSelf && <a className="uk-button uk-button-default uk-margin-right uk-margin-small" style={{ height: '40px', width: '120px' }} href="#follow">Follow</a>}
-              <span className="uk-margin-small">
-                <h5 id="followers" className="uk-text-bold">{`Follower: ${(data.followers).length}`}</h5>
-                <h5 id="following" className="uk-text-bold">{`Followee: ${(data.followees).length}`}</h5>
-                <h5 id="name" className="uk-text-bold">{`Name: ${data.firstName + " " + data.lastName}`}</h5>
-              </span>
+      <div>
+        <NavBar />
+        <div className="uk-flex uk-flex-center uk-background-default">
+          <div className="uk-container uk-container-small">
+            <div className="uk-grid" uk-grid>
+              <div className="uk-width-1-3 uk-flex uk-flex-middle uk-flex-center">
+                <img className="uk-border-pill" style={{ height: '150px', width: '150px' }} id="profile-image" src={require('../images/photogram.png')} alt="" />
+              </div>
+              <div className="uk-width-expand uk-padding-small uk-flex uk-flex-column">
+                <h1 id="username" className="uk-text-light uk-margin-remove uk-heading-xsmall">{data.username}</h1>
+                {isSelf && <a className="uk-button uk-button-default uk-margin-right uk-margin-small" style={{ height: '40px', width: '120px' }} href="#follow">Follow</a>}
+                <span className="uk-margin-small">
+                  <h5 id="followers" className="uk-text-bold">{`Follower: ${(data.followers).length}`}</h5>
+                  <h5 id="following" className="uk-text-bold">{`Followee: ${(data.followees).length}`}</h5>
+                  <h5 id="name" className="uk-text-bold">{`Name: ${data.firstName + " " + data.lastName}`}</h5>
+                </span>
+              </div>
             </div>
           </div>
         </div>
