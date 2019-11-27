@@ -11,6 +11,7 @@ import Register from './Register';
 import MakePost from './MakePost';
 import Comments from './Comments';
 import RouteProtector from './RouteProtector';
+import RouteVerifier from './RouteVerifier';
 
 
 class App extends PureComponent {
@@ -18,14 +19,13 @@ class App extends PureComponent {
     return (
       <Router>
         <div className="App">
-          <Route exact path="/" component={Login} />
-          <Route exact path="/login" component={Login} />
+          <Route exact path="/login" component={RouteVerifier(Login)} />
           <Route exact path="/navBar" component={NavBar} />
           <Route exact path="/makePost" component={RouteProtector(MakePost)} />
-          <Route exact path="/post" component={RouteProtector(Post)} />
+          <Route exact path="/" component={RouteProtector(Post)} />
           <Route exact path="/profile" component={RouteProtector(Profile)} />
           <Route exact path="/comments" component={RouteProtector(Comments)} />
-          <Route exact path="/register" component={Register} />
+          <Route exact path="/register" component={RouteVerifier(Register)} />
         </div>
       </Router>
     );

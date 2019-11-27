@@ -3,37 +3,37 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { checkAuth } from '../javascripts/authRequests';
 
-const RouteProtector = (Component) => class App extends Component {
+const RouteVerifier = (Component) => class App extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      isAuthenticated: false,
+      isNotAuthenticated: false,
       isLoading: true,
     };
   }
 
   componentDidMount() {
     checkAuth().then((res) => {
-      this.setState({ isAuthenticated: res.ok, isLoading: false });
+      this.setState({ isNotAuthenticated: !(res.ok), isLoading: false });
     }).catch(() => {
       this.setState({ isLoading: false });
     });
   }
 
   render() {
-    const { isAuthenticated, isLoading } = this.state;
+    const { isNotAuthenticated, isLoading } = this.state;
 
     if (isLoading) {
       return <div>Loading...</div>;
     }
 
-    if (!isAuthenticated) {
-      return <Redirect to="/login" />;
+    if (!isNotAuthenticated) {
+      return <Redirect to="/" />;
     }
 
     return <Component {...this.props} />;
   }
 };
 
-export default RouteProtector;
+export default RouteVerifier;
