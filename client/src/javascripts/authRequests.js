@@ -1,11 +1,11 @@
-/* globals fetch */
+/* globals fetch FormData */
 
 import { api } from '../api';
 
 async function register(firstName, lastName, email, password, username, image = null) {
   const formData = new FormData();
-  formData.append('firstname', firstName);
-  formData.append('lastname', lastName);
+  formData.append('firstName', firstName);
+  formData.append('lastName', lastName);
   formData.append('email', email);
   formData.append('password', password);
   formData.append('username', username);

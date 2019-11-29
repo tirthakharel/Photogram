@@ -16,7 +16,7 @@ class Register extends Component {
       username: '',
       email: '',
       password: '',
-      file: null,
+      image: null,
     };
 
     this.callAPI = this.callAPI.bind(this);
@@ -40,8 +40,7 @@ class Register extends Component {
   }
 
   handleFileChange(event) {
-    console.log(event.target.files[0]);
-    this.setState({ file: event.target.files[0] });
+    this.setState({ image: event.target.files[0] });
   }
 
   handleSubmit(event) {
@@ -54,7 +53,7 @@ class Register extends Component {
     const { email } = this.state;
     const { password } = this.state;
     const { username } = this.state;
-    const { file } = this.state;
+    const { image } = this.state;
 
     register(
       firstName,
@@ -62,7 +61,7 @@ class Register extends Component {
       email,
       password,
       username,
-      file,
+      image,
     )
       .then((res) => {
         if (res.ok) {

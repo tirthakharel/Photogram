@@ -6,7 +6,7 @@ const { checkAuthenticated } = require('../app');
 const router = express.Router();
 
 router.get('/getUser', checkAuthenticated, (req, res) => {
-  const { username } = req.body;
+  const { username } = req.user;
 
   User.findOne({ username })
     .then((userInDatabase) => {

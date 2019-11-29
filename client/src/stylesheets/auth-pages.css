@@ -1,4 +1,4 @@
-#slide-show::after{
+#slide-show::after {
   position:absolute; width:0; height:0; overflow:hidden; z-index:-1;
   content:url('../images/slide-2.jpg') url('../images/slide-3.jpg') url('../images/slide-4.jpg') url('../images/slide-5.jpg');  
 }

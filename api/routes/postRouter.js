@@ -91,7 +91,7 @@ router.get('/getPost/:postId', checkAuthenticated, (req, res) => {
   const { postId } = req.params;
 
   Post.findOne({ _id: ObjectId(postId) }, (postInDatabase) => {
-    if (postInDatabase == null) {
+    if (!postInDatabase) {
       res.status(500);
       res.send(`[!] Could not find post: ${postId}`);
     } else {

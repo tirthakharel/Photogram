@@ -65,6 +65,7 @@ const strategy = new LocalStrategy({ usernameField: 'email' }, (email, password,
       if (!user) {
         success = false;
         message = 'No user with that email';
+        return done(null, false, { message });
       }
 
       let { attempts } = user.lockout;
@@ -102,11 +103,11 @@ const strategy = new LocalStrategy({ usernameField: 'email' }, (email, password,
             // The user provided an incorrect password.
             // Check to see if their last login failure happened recently.
             if (lastFailedDatetime > 0 && lastFailedDatetime + msToLockout > Date.now()) {
-            // The user's last login failure happened recently.
+              // The user's last login failure happened recently.
               attempts += 1;
               lastFailedDatetime = Date.now();
             } else {
-            // The user's last login failure did not happen recently.
+              // The user's last login failure did not happen recently.
               attempts = 1;
               lastFailedDatetime = Date.now();
             }
