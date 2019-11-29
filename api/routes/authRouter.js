@@ -1,6 +1,8 @@
+/* eslint-disable prefer-destructuring */
 const bcrypt = require('bcryptjs');
 const express = require('express');
 const fs = require('fs');
+const path = require('path');
 const User = require('../models/User');
 const { passport } = require('../app');
 const { parser } = require('../app');
@@ -10,19 +12,19 @@ const { checkNotAuthenticated } = require('../app');
 const router = express.Router();
 
 router.post('/register', checkNotAuthenticated, parser.single('image'), async (req, res) => {
-  const { firstName } = req.body;
-  const { lastName } = req.body;
+  const { firstname } = req.body;
+  const { lastname } = req.body;
   const { email } = req.body;
   const { password } = req.body;
   const { username } = req.body;
-  const { file } = req;
+  const file = req.file;
 
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Leave image undefined if the user does not upload a profile picture.
     // Handle undefined case on the client side.
-    let image;
+    let image = fs.readFileSync(path.join(__dirname, '../public/images/default-profile.png'));
 
     User.findOne({ email })
       .then((userFoundByEmail) => {
@@ -44,6 +46,7 @@ router.post('/register', checkNotAuthenticated, parser.single('image'), async (r
                     bytes = img.toString('base64');
                     fs.unlinkSync(file.path);
                   } catch (err) {
+                    console.log(err);
                     res.status(400);
                     res.send(`[!] Could not read profile picture: ${err}`);
                   }
@@ -56,8 +59,8 @@ router.post('/register', checkNotAuthenticated, parser.single('image'), async (r
                 const newUser = new User({
                   email,
                   username,
-                  firstName,
-                  lastName,
+                  firstName: firstname,
+                  lastName: lastname,
                   password: hashedPassword,
                   image,
                   posts: [],
@@ -77,6 +80,7 @@ router.post('/register', checkNotAuthenticated, parser.single('image'), async (r
         }
       });
   } catch (err) {
+    console.log(err);
     res.status(500);
     res.send(`[!] Could not register user: ${err}`);
   }
@@ -99,7 +103,7 @@ router.get('/checkAuth', (req, res) => {
   if (req.isAuthenticated()) {
     res.sendStatus(200);
   } else {
-    res.sendStatus(401);
+    res.sendStatus(204);
   }
 });
 
