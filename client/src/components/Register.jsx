@@ -58,7 +58,7 @@ class Register extends Component {
     )
       .then((res) => {
         if (res.ok) {
-          history.push('/post');
+          history.push('/login');
         }
       })
       .catch((err) => {

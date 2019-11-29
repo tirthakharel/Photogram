@@ -1,5 +1,16 @@
 const mongoose = require('mongoose');
 
+const LockoutSchema = new mongoose.Schema({
+  attempts: {
+    type: Number,
+    required: true,
+  },
+  lastFailedDatetime: {
+    type: Number,
+    required: true,
+  },
+});
+
 const UserSchema = new mongoose.Schema({
   email: {
     type: String,
@@ -21,6 +32,10 @@ const UserSchema = new mongoose.Schema({
   },
   password: {
     type: String,
+    required: true,
+  },
+  lockout: {
+    type: LockoutSchema,
     required: true,
   },
   image: {

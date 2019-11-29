@@ -59,6 +59,7 @@ router.post('/register', checkNotAuthenticated, parser.single('image'), async (r
                   firstName,
                   lastName,
                   password: hashedPassword,
+                  lockout: { attempts: 0, lastFailedDatetime: -1 },
                   image,
                   posts: [],
                   likes: [],
@@ -66,9 +67,12 @@ router.post('/register', checkNotAuthenticated, parser.single('image'), async (r
                   followees: [],
                 });
 
+                console.log(password);
+
                 newUser.save()
                   .then(() => res.sendStatus(200))
                   .catch((err) => {
+                    console.log(err);
                     res.status(500);
                     res.send(`[!] Could not register user: ${err}`);
                   });
@@ -77,6 +81,7 @@ router.post('/register', checkNotAuthenticated, parser.single('image'), async (r
         }
       });
   } catch (err) {
+    console.log(err);
     res.status(500);
     res.send(`[!] Could not register user: ${err}`);
   }

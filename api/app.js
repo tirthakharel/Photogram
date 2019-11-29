@@ -2,9 +2,7 @@
 const bcrypt = require('bcryptjs');
 const express = require('express');
 const path = require('path');
-const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const cors = require('cors');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const flash = require('express-flash');
@@ -50,23 +48,87 @@ const parser = multer({ storage });
  * Passport initialization.
  */
 const strategy = new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
+  // Lockout settings.
+  const attemptsToLockout = 3;
+  // 5 minutes in milliseconds.
+  const msToLockout = 5 * 60 * 1000;
+  // 24 hours in milliseconds.
+  const msOfLockout = 24 * 60 * 60 * 1000;
+
+  let lockedOut = false;
+  let success = false;
+  let message = '';
+
   User.findOne({ email })
     .then((user) => {
       if (!user) {
-        return done(null, false, { message: 'No user with that email' });
+        success = false;
+        message = 'No user with that email';
       }
 
-      bcrypt.compare(password, user.password, (err, same) => {
-        if (err) {
-          throw err;
+      let { attempts } = user.lockout;
+      // If lastFailedDatetime < 0, there is no recorded login failure.
+      let { lastFailedDatetime } = user.lockout;
+
+      // Check if the user failed too many login attempts.
+      if (attempts >= attemptsToLockout) {
+        // Check if the user's login failures happened recently.
+        if (lastFailedDatetime < 0 || lastFailedDatetime + msOfLockout > Date.now()) {
+          // The user's login failures happened recently.
+          // They are locked out.
+          lockedOut = true;
+          success = false;
+          message = 'Account is locked out';
+          return done(null, false, { message });
         }
 
-        if (same) {
-          return done(null, user);
-        }
+        // The user was locked out previously, but enough time elapsed to unlock the account.
+        lockedOut = false;
+        attempts = 0;
+        lastFailedDatetime = -1;
+      }
 
-        return done(null, false, { message: 'Incorrect password' });
-      });
+      if (!lockedOut) {
+        // The user is not locked out.
+        // Check their password.
+        bcrypt.compare(password, user.password, (bcryptErr, same) => {
+          if (same) {
+            // The user provided the correct password.
+            attempts = 0;
+            lastFailedDatetime = -1;
+            success = true;
+          } else {
+            // The user provided an incorrect password.
+            // Check to see if their last login failure happened recently.
+            if (lastFailedDatetime > 0 && lastFailedDatetime + msToLockout > Date.now()) {
+            // The user's last login failure happened recently.
+              attempts += 1;
+              lastFailedDatetime = Date.now();
+            } else {
+            // The user's last login failure did not happen recently.
+              attempts = 1;
+              lastFailedDatetime = Date.now();
+            }
+
+            success = false;
+          }
+
+          // Update the user's lockout status.
+          User.findOneAndUpdate(
+            { email },
+            { $set: { 'lockout.attempts': attempts, 'lockout.lastFailedDatetime': lastFailedDatetime } },
+            { new: true },
+          )
+            .then(() => {
+              if (success) {
+                return done(null, user);
+              }
+
+              return done(null, false, { message });
+            })
+            .catch((err) => done(err));
+        });
+      }
     })
     .catch((err) => done(err));
 });
