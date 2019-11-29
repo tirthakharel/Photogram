@@ -1,4 +1,6 @@
 const express = require('express');
+const fs = require('fs');
+const path = require('path');
 const Post = require('../models/Post');
 const User = require('../models/User');
 const { checkAuthenticated } = require('../app');
@@ -22,7 +24,11 @@ router.get('/getUser', checkAuthenticated, (req, res) => {
         // To display the image on the client side, set an img element's "src" to the following,
         // where "resJson" is the response from this route as a JSON object:
         // `data:image/png;base64,${btoa(String.fromCharCode.apply(null, resJson.image.data))}`
-        userToSend.image = Buffer.from(userInDatabase.image, 'binary');
+        try {
+          userToSend.image = Buffer.from(userInDatabase.image, 'binary');
+        } catch (err) {
+          userToSend.image = fs.readFileSync(path.join(__dirname, '../public/images/default-profile.png'));
+        }
 
         res.status(200);
         res.send(userToSend);
@@ -33,6 +39,7 @@ router.get('/getUser', checkAuthenticated, (req, res) => {
     })
     .catch((err) => {
       res.status(500);
+      console.log(err);
       res.send(`[!] Could not retrieve user: ${err}`);
     });
 });
