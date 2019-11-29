@@ -1,7 +1,6 @@
 /* eslint-disable prefer-destructuring */
 const bcrypt = require('bcryptjs');
 const express = require('express');
-const { check, validationResult } = require('express-validator');
 const fs = require('fs');
 const path = require('path');
 const User = require('../models/User');
@@ -10,102 +9,96 @@ const { parser } = require('../app');
 const { checkAuthenticated } = require('../app');
 const { checkNotAuthenticated } = require('../app');
 const {
-  minCredLength,
-  maxCredLength,
-  maxFileMb,
+  checkInput,
+  handleInputCheck,
   checkFileSize,
-} = require('../app').inputRestrictions;
+  maxFileMb,
+} = require('../app');
 
 const router = express.Router();
 
-router.post('/register', checkNotAuthenticated, parser.single('image'), async (req, res) => {
-  const { firstName } = req.body;
-  const { lastName } = req.body;
-  const { email } = req.body;
-  const { password } = req.body;
-  const { username } = req.body;
-  const { file } = req;
+router.post('/register', checkNotAuthenticated,
+  parser.single('image'),
+  checkInput(),
+  handleInputCheck,
+  async (req, res) => {
+    const { firstName } = req.body;
+    const { lastName } = req.body;
+    const { email } = req.body;
+    const { password } = req.body;
+    const { username } = req.body;
+    const { file } = req;
 
-  // check('firstName').isLength({ min: minCredLength, max: maxCredLength }),
-  // check('lastName').isLength({ min: minCredLength, max: maxCredLength }),
-  // check('email').isEmail().isLength({ min: minCredLength, max: maxCredLength }),
-  // check('password').isLength({ min: minCredLength }),
-  // check('username').isLength({ min: minCredLength, max: maxCredLength }),
+    if (file && !checkFileSize(file)) {
+      res.status(422).send(`[!] Profile picture is too large (max = ${maxFileMb}MB)`);
+    } else {
+      try {
+        const hashedPassword = await bcrypt.hash(password, 10);
+        let image = fs.readFileSync(path.join(__dirname, '../public/images/default-profile.png'));
 
-  console.log(req.body);
+        User.findOne({ email })
+          .then((userFoundByEmail) => {
+            if (userFoundByEmail) {
+              res.status(400);
+              res.send(`[!] Email address is already in use: ${email}`);
+            } else {
+              User.findOne({ username })
+                .then((userFoundByUsername) => {
+                  if (userFoundByUsername) {
+                    res.status(400);
+                    res.send(`[!] Username is already in use: ${username}`);
+                  } else {
+                    if (file) {
+                      let bytes;
 
-  // const errors = validationResult(req);
-  // !errors.isEmpty()
-  // res.status(422).json({ errors: errors.array() });
+                      try {
+                        const img = fs.readFileSync(file.path);
+                        bytes = img.toString('base64');
+                        fs.unlinkSync(file.path);
+                      } catch (err) {
+                        res.status(400);
+                        res.send(`[!] Could not read profile picture: ${err}`);
+                      }
 
-  if (file && !checkFileSize(file)) {
-    res.status(422).send(`[!] Profile picture is too large (max = ${maxFileMb}MB)`);
-  } else {
-    try {
-      const hashedPassword = await bcrypt.hash(password, 10);
-      let image = fs.readFileSync(path.join(__dirname, '../public/images/default-profile.png'));
-
-      User.findOne({ email })
-        .then((userFoundByEmail) => {
-          if (userFoundByEmail) {
-            res.status(400);
-            res.send(`[!] Email address is already in use: ${email}`);
-          } else {
-            User.findOne({ username })
-              .then((userFoundByUsername) => {
-                if (userFoundByUsername) {
-                  res.status(400);
-                  res.send(`[!] Username is already in use: ${username}`);
-                } else {
-                  if (file) {
-                    let bytes;
-
-                    try {
-                      const img = fs.readFileSync(file.path);
-                      bytes = img.toString('base64');
-                      fs.unlinkSync(file.path);
-                    } catch (err) {
-                      res.status(400);
-                      res.send(`[!] Could not read profile picture: ${err}`);
+                      if (bytes) {
+                        image = Buffer.from(bytes, 'base64');
+                      }
                     }
 
-                    if (bytes) {
-                      image = Buffer.from(bytes, 'base64');
-                    }
-                  }
-
-                  const newUser = new User({
-                    email,
-                    username,
-                    firstName,
-                    lastName,
-                    password: hashedPassword,
-                    lockout: { attempts: 0, lastFailedDatetime: -1 },
-                    image,
-                    posts: [],
-                    likes: [],
-                    followers: [],
-                    followees: [],
-                  });
-
-                  newUser.save()
-                    .then(() => res.sendStatus(200))
-                    .catch((err) => {
-                      res.status(500);
-                      res.send(`[!] Could not register user: ${err}`);
+                    const newUser = new User({
+                      email,
+                      username,
+                      firstName,
+                      lastName,
+                      password: hashedPassword,
+                      lockout: { attempts: 0, lastFailedDatetime: -1 },
+                      image,
+                      posts: [],
+                      likes: [],
+                      followers: [],
+                      followees: [],
                     });
-                }
-              });
-          }
-        });
-    } catch (err) {
-      res.status(500);
-      res.send(`[!] Could not register user: ${err}`);
-    }
-  }
-});
 
-router.post('/login', checkNotAuthenticated, passport.authenticate('local'),
+                    newUser.save()
+                      .then(() => res.sendStatus(200))
+                      .catch((err) => {
+                        res.status(500);
+                        res.send(`[!] Could not register user: ${err}`);
+                      });
+                  }
+                });
+            }
+          });
+      } catch (err) {
+        res.status(500);
+        res.send(`[!] Could not register user: ${err}`);
+      }
+    }
+  });
+
+router.post('/login',
+  checkNotAuthenticated,
+  passport.authenticate('local'),
   (req, res) => {
     res.sendStatus(200);
   },

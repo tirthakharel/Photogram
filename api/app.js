@@ -1,6 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 const bcrypt = require('bcryptjs');
 const express = require('express');
+const { check, validationResult } = require('express-validator');
 const fs = require('fs');
 const path = require('path');
 const logger = require('morgan');
@@ -169,6 +170,31 @@ function checkNotAuthenticated(req, res, next) {
 /**
  * Settings for input validation.
  */
+function checkInput() {
+  return [
+    check('firstName').isLength({ min: 1, max: 32 }),
+    check('lastName').isLength({ min: 1, max: 32 }),
+    check('email').isEmail().isLength({ min: 1, max: 32 }),
+    check('password').isLength({ min: 1, max: 256 }),
+    check('username').isLength({ min: 1, max: 32 }),
+  ];
+}
+
+function handleInputCheck(req, res, next) {
+  const errors = validationResult(req);
+
+  if (errors.isEmpty()) {
+    return next();
+  }
+
+  const extractedErrors = [];
+  errors.array().map((err) => extractedErrors.push({ [err.param]: err.msg }));
+
+  return res.status(422).json({
+    errors: extractedErrors,
+  });
+}
+
 const maxFileMb = 2;
 
 function checkFileSize(file) {
@@ -182,13 +208,6 @@ function checkFileSize(file) {
 
   return true;
 }
-
-const inputRestrictions = {
-  minCredLength: 1,
-  maxCredLength: 32,
-  maxFileMb,
-  checkFileSize,
-};
 
 /**
  * Express initialization.
@@ -221,7 +240,10 @@ expressApp.use((req, res, next) => {
 module.exports = {
   checkAuthenticated,
   checkNotAuthenticated,
-  inputRestrictions,
+  checkInput,
+  handleInputCheck,
+  maxFileMb,
+  checkFileSize,
   expressApp,
   passport,
   parser,
