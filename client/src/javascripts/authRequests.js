@@ -2,22 +2,19 @@
 
 import { api } from '../api';
 
-async function register(firstName, lastName, email, password, username, image = '') {
+async function register(firstName, lastName, email, password, username, image = null) {
+  const formData = new FormData();
+  formData.append('firstname', firstName);
+  formData.append('lastname', lastName);
+  formData.append('email', email);
+  formData.append('password', password);
+  formData.append('username', username);
+  formData.append('image', image);
+
   return fetch(`${api.url}/register`,
     {
       method: 'POST',
-      body: JSON.stringify({
-        firstName,
-        lastName,
-        email,
-        password,
-        username,
-        image,
-      }),
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-        Accept: 'application/json; charset=UTF-8',
-      },
+      body: formData,
       credentials: 'include',
       mode: 'cors',
     });

@@ -16,11 +16,13 @@ class Register extends Component {
       username: '',
       email: '',
       password: '',
+      file: null,
     };
 
     this.callAPI = this.callAPI.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleFileChange = this.handleFileChange.bind(this);
   }
 
   componentDidMount() {
@@ -29,13 +31,17 @@ class Register extends Component {
 
   callAPI() {
     fetch(`${api.url}/testAPI`)
-      .then((res) => res.text())
       .then((res) => this.setState({ apiResponse: res }))
       .catch((err) => err);
   }
 
   handleChange(event) {
     this.setState({ [event.target.id]: event.target.value });
+  }
+
+  handleFileChange(event) {
+    console.log(event.target.files[0]);
+    this.setState({ file: event.target.files[0] });
   }
 
   handleSubmit(event) {
@@ -48,6 +54,7 @@ class Register extends Component {
     const { email } = this.state;
     const { password } = this.state;
     const { username } = this.state;
+    const { file } = this.state;
 
     register(
       firstName,
@@ -55,10 +62,11 @@ class Register extends Component {
       email,
       password,
       username,
+      file,
     )
       .then((res) => {
         if (res.ok) {
-          history.push('/post');
+          history.push('/');
         }
       })
       .catch((err) => {
@@ -109,7 +117,7 @@ class Register extends Component {
               </div>
               <div className="uk-margin">
                 <div className="uk-inline uk-width-1-1" uk-form-custom="target: true">
-                  <input id="image" name="image" type="file" accept="image/*" />
+                  <input onChange={this.handleFileChange} id="image" name="image" type="file" accept="image/*" />
                   <input className="uk-input uk-border-pill" type="text" placeholder="Select profile image" />
                 </div>
               </div>

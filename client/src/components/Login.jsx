@@ -2,7 +2,6 @@
 
 import React, { Component } from 'react';
 import { rgba } from 'polished';
-import { api } from '../api';
 import { login } from '../javascripts/authRequests';
 
 class Login extends Component {
@@ -10,25 +9,12 @@ class Login extends Component {
     super(props);
 
     this.state = {
-      apiResponse: '',
       email: '',
       password: '',
     };
 
-    this.callAPI = this.callAPI.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  componentDidMount() {
-    this.callAPI();
-  }
-
-  callAPI() {
-    fetch(`${api.url}/testAPI`)
-      .then((res) => res.text())
-      .then((res) => this.setState({ apiResponse: res }))
-      .catch((err) => err);
   }
 
   handleChange(event) {
@@ -46,7 +32,7 @@ class Login extends Component {
     login(email, password)
       .then((res) => {
         if (res.ok) {
-          history.push('/post');
+          history.push('/');
         }
       })
       .catch((err) => {
@@ -56,7 +42,7 @@ class Login extends Component {
 
   render() {
     return (
-      <div className="uk-cover-container uk-background-secondary uk-flex uk-flex-center uk-flex-middle uk-height-viewport uk-overflow-hidden uk-light" data-uk-height-viewport>
+      <div id="slideshow" className="uk-cover-container uk-background-secondary uk-flex uk-flex-center uk-flex-middle uk-height-viewport uk-overflow-hidden uk-light" data-uk-height-viewport>
         <div className="uk-border-rounded uk-width-large uk-padding-large uk-position-z-index" uk-scrollspy="cls: uk-animation-fade" style={{ backgroundColor: rgba(253, 253, 253, 0.253) }}>
           <div className="uk-text-center uk-margin">
             <img src={require('../images/photogram.png')} alt="Logo" />
