@@ -9,6 +9,7 @@ import Profile from './Profile';
 import Register from './Register';
 import MakePost from './MakePost';
 import Comments from './Comments';
+import Follow from './Follow';
 import RouteProtector from './RouteProtector';
 import RouteVerifier from './RouteVerifier';
 
@@ -24,6 +25,7 @@ class App extends PureComponent {
           <Route exact path="/profile" component={RouteProtector(Profile)} />
           <Route exact path="/comments" component={RouteProtector(Comments)} />
           <Route exact path="/register" component={RouteVerifier(Register)} />
+          <Route exact path="/follow" component={Follow} />
         </div>
       </Router>
     );
