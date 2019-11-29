@@ -13,7 +13,8 @@ router.get('/getUser', checkAuthenticated, (req, res) => {
       if (userInDatabase) {
         const userToSend = userInDatabase;
 
-        // Don't send the user's password.
+        // Don't send the user's email or password.
+        delete userToSend.email;
         delete userToSend.password;
 
         // Send the profile picture as a Buffer.

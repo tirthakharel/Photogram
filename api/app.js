@@ -1,6 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 const bcrypt = require('bcryptjs');
 const express = require('express');
+const fs = require('fs');
 const path = require('path');
 const logger = require('morgan');
 const passport = require('passport');
@@ -153,7 +154,7 @@ function checkAuthenticated(req, res, next) {
     return next();
   }
 
-  return res.sendStatus(500);
+  return res.sendStatus(401);
 }
 
 function checkNotAuthenticated(req, res, next) {
@@ -163,6 +164,30 @@ function checkNotAuthenticated(req, res, next) {
 
   return next();
 }
+
+/**
+ * Settings for input validation.
+ */
+const maxFileMb = 2;
+
+function checkFileSize(file) {
+  const fileStats = fs.statSync(file.path);
+  const fileSizeInBytes = fileStats.size;
+  const fileSizeInMegabytes = fileSizeInBytes / 1000000.0;
+
+  if (fileSizeInMegabytes > maxFileMb) {
+    return false;
+  }
+
+  return true;
+}
+
+const inputRestrictions = {
+  minCredLength: 1,
+  maxCredLength: 32,
+  maxFileMb,
+  checkFileSize,
+};
 
 /**
  * Express initialization.
@@ -195,6 +220,7 @@ expressApp.use((req, res, next) => {
 module.exports = {
   checkAuthenticated,
   checkNotAuthenticated,
+  inputRestrictions,
   expressApp,
   passport,
   parser,
