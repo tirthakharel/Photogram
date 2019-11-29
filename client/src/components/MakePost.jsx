@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 import { api } from '../api';
+import NavBar from './NavBar';
 
 class MakePost extends Component {
   constructor(props) {
@@ -29,9 +30,11 @@ class MakePost extends Component {
   render() {
     if(this.state.visibility){
       return (
-    <div className="uk-cover-container uk-flex uk-flex-center uk-flex-middle uk-height-viewport" data-uk-height-viewport>
+    <div>
+    <NavBar />
+    <div className="uk-cover-container uk-flex uk-flex-center uk-flex-middle">
         <fieldset className="uk-fieldset">
-            <h3>Create Post</h3>
+            <h2>Create Post</h2>
               <div className="">
                   <input className="uk-input" type="text" placeholder="Title"></input>
                 </div>
@@ -52,9 +55,11 @@ class MakePost extends Component {
                     <label htmlFor="image" className="uk-form-label uk-text-large">Select an image to upload:</label>
                     <input id="image" className="uk-input uk-form-width-xxlarge" type="file" name="image" accept="image/*"></input>
                 </div>
-                <input type="submit" className= "uk-button-primary uk-button-medium uk-text-large" value="Upload"></input>
+                <input type="submit" className= "uk-button-primary uk-button-large uk-text-large" value="Upload"></input>
+                <a className= "uk-margin-top uk-margin-left uk-button-danger uk-button-large uk-text-large" href={'/'} value="Upload">Cancel</a>
             </fieldset>
         </div> 
+      </div>
             )
         }
     else{
