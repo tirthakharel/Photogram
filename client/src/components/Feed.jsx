@@ -37,7 +37,7 @@ class Feed extends Component {
 
   render() {
     const { data } = this.state;
-    const tags = data.tags.map((tag) => (<span className="uk-label uk-margin-bottom">{tag}</span>));
+    const tags = data.tags.map((tag) => (<span className="uk-label uk-margin-bottom uk-margin-small-left">{tag}</span>));
     return (
       <div>
         <NavBar />
