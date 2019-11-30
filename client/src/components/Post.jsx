@@ -10,7 +10,7 @@ class Post extends Component {
     this.state = {
       postid: props.postid,
       isLoading: true,
-      currentUser: false,
+      currentUser: props.currentUser,
       data: null,
     };
   }
@@ -51,26 +51,42 @@ class Post extends Component {
         <div className="uk-card uk-card-default uk-card-hover uk-align-center" uk-scrollspy="cls: uk-animation-slide-left; repeat: true">
           <h3 className="uk-card-title uk-text-left-medium">{data.title}</h3>
           <div className="uk-card-media-top">
-            <img src={require('../images/photogram.png')} alt="" />
+            <img src={`data:image/png;base64,${data.image}`} alt="" />
           </div>
           <div className="uk-card-body">
             <h3 className="uk-card-title uk-text-small">
-              Posted by {" "}
-              <a href="/">{data.postBy}</a>
+              Posted by
+              <a href="/">{` ${data.username}`}</a>
             </h3>
             <p id="">{data.description}</p>
-            <a href="/" uk-icon="heart" />
+            <a href="/" uk-icon="heart"> </a>
           </div>
         </div>
       );
     }
 
-    return '';
+    return (
+      <div className="uk-card uk-card-default uk-card-hover uk-align-center" uk-scrollspy="cls: uk-animation-slide-left; repeat: true">
+        <h3 className="uk-card-title uk-text-left-medium">{data.title}</h3>
+        <div className="uk-card-media-top">
+          <img src={`data:image/png;base64,${data.image}`} alt="" />
+        </div>
+        <div className="uk-card-body">
+          <h3 className="uk-card-title uk-text-small">
+            Posted by
+            <a href="/">{` ${data.username}`}</a>
+          </h3>
+          <p id="">{data.description}</p>
+          <a href="/" uk-icon="heart"> </a>
+        </div>
+      </div>
+    );
   }
 }
 
 Post.propTypes = {
   postid: PropTypes.number.isRequired,
+  currentUser: PropTypes.bool.isRequired,
 };
 
 export default Post;

@@ -1,6 +1,7 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
+const { ObjectId } = require('mongoose').Types;
 const Post = require('../models/Post');
 const User = require('../models/User');
 const { checkAuthenticated } = require('../app');
@@ -39,7 +40,27 @@ router.get('/getUser', checkAuthenticated, (req, res) => {
     })
     .catch((err) => {
       res.status(500);
-      console.log(err);
+      res.send(`[!] Could not retrieve user: ${err}`);
+    });
+});
+
+router.get('/getUserPosts/:id', checkAuthenticated, (req, res) => {
+  const { id } = req.params;
+
+  User.findOne({ _id: ObjectId(id) })
+    .then((userInDatabase) => {
+      if (userInDatabase) {
+        const userToSend = userInDatabase;
+
+        res.status(200);
+        res.send(userToSend.posts);
+      } else {
+        res.status(500);
+        res.send('[!] User not found');
+      }
+    })
+    .catch((err) => {
+      res.status(500);
       res.send(`[!] Could not retrieve user: ${err}`);
     });
 });
