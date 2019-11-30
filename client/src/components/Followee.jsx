@@ -5,7 +5,7 @@ import NavBar from './NavBar';
 import { api } from '../api';
 
 const Testdata = {
-    recommends: [
+    followees: [
     'Jack',
     'Rose',
     'Nick',
@@ -14,7 +14,7 @@ const Testdata = {
 };
 
 
-class Follow extends Component {
+class Followee extends Component {
   constructor(props) {
     super(props);
 
@@ -37,11 +37,11 @@ class Follow extends Component {
 
   render() {
     const {data} = this.state;
-    const recommends = data.recommends.map((recommend) => { return(
+    const recommends = data.followees.map((followee) => { return(
          <div className="uk-card uk-card-default uk-card-hover uk-align-center" uk-scrollspy="cls: uk-animation-slide-left; repeat: true">
             <div className="uk-card uk-card-primary uk-card-body uk-card-hover uk-margin-top">
-              <h3 class="uk-card-title"><a href=''>{recommend}</a></h3>
-              <span><p>Follow {recommend} to see more POSTs!</p> <button className='uk-button uk-button-danger'>Follow</button></span>
+              <h3 class="uk-card-title"><a href=''>{followee}</a></h3>
+              <span><p>You are currently following {followee}!</p> <button className='uk-button uk-button-danger'>Unfollow</button></span>
             </div>
         </div>
     )});
@@ -58,4 +58,4 @@ class Follow extends Component {
     </div>)
         }
     }  
-export default Follow;
+export default Followee;
