@@ -2,6 +2,13 @@
 import React, { Component } from 'react';
 import { api } from '../api';
 
+//function used to do the spliting, move the the backend
+
+let stringToArray = function(s){
+  const res = s.split(",")
+  return res
+}
+
 const testData = {
     postID: 'abcd',
     comments: [{
@@ -57,7 +64,10 @@ class Comments extends Component {
   )});
     return (
       <div className="uk-container uk-container-small">
-        <textarea className="uk-textarea" placeholder="Reply"></textarea>
+        <textarea className="uk-textarea" rows="4" placeholder="Reply"></textarea>
+        <div className="uk-margin-small">
+        <textarea className="uk-textarea" rows="1" placeholder="Mentions (Separated with Commas)"></textarea>
+        </div>
         <button type="submit" className="uk-button uk-button-primary uk-border uk-width-1-1" id="submit">Sumbit</button>
         {comments}
       </div>

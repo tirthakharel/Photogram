@@ -4,6 +4,13 @@ import React, { Component } from 'react';
 import { api } from '../api';
 import NavBar from './NavBar';
 
+//function used to do the spliting, move the the backend
+
+let stringToArray = function(s){
+  const res = s.split(",")
+  return res
+}
+
 class MakePost extends Component {
   constructor(props) {
     super(props);
@@ -35,12 +42,15 @@ class MakePost extends Component {
     <div className="uk-cover-container uk-flex uk-flex-center uk-flex-middle">
         <fieldset className="uk-fieldset">
             <h2>Create Post</h2>
-              <div className="">
+            <div className="">
                   <input className="uk-input" type="text" placeholder="Title"></input>
-                </div>
-                <div className="uk-margin">
+            </div>
+            <div className="uk-margin">
                     <textarea className="uk-textarea" rows="5" placeholder="Description"></textarea>
-                </div>
+            </div>
+            <div className="uk-margin">
+                <textarea className="uk-textarea" rows="1" placeholder="Mentions (Separated with Commas)"></textarea>
+            </div>
                 <div className="uk-margin uk-grid-small uk-child-width-auto uk-grid">
                     <label>
                     <input className="uk-radio" type="radio" name="radio2" checked></input>
