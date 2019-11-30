@@ -9,7 +9,7 @@ const { parser } = require('../app');
 const { checkAuthenticated } = require('../app');
 const { checkNotAuthenticated } = require('../app');
 const {
-  checkInput,
+  checkAndSanitizeInput,
   handleInputCheck,
   checkFileSize,
   maxFileMb,
@@ -19,7 +19,7 @@ const router = express.Router();
 
 router.post('/register', checkNotAuthenticated,
   parser.single('image'),
-  checkInput(),
+  checkAndSanitizeInput(),
   handleInputCheck,
   async (req, res) => {
     const { firstName } = req.body;
@@ -30,7 +30,7 @@ router.post('/register', checkNotAuthenticated,
     const { file } = req;
 
     if (file && !checkFileSize(file)) {
-      res.status(422).send(`[!] Profile picture is too large (max = ${maxFileMb}MB)`);
+      res.status(413).send(`[!] Profile picture is too large (max = ${maxFileMb}MB)`);
     } else {
       try {
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -39,13 +39,13 @@ router.post('/register', checkNotAuthenticated,
         User.findOne({ email })
           .then((userFoundByEmail) => {
             if (userFoundByEmail) {
-              res.status(400);
+              res.status(409);
               res.send(`[!] Email address is already in use: ${email}`);
             } else {
               User.findOne({ username })
                 .then((userFoundByUsername) => {
                   if (userFoundByUsername) {
-                    res.status(400);
+                    res.status(409);
                     res.send(`[!] Username is already in use: ${username}`);
                   } else {
                     if (file) {
@@ -56,7 +56,7 @@ router.post('/register', checkNotAuthenticated,
                         bytes = img.toString('base64');
                         fs.unlinkSync(file.path);
                       } catch (err) {
-                        res.status(400);
+                        res.status(551);
                         res.send(`[!] Could not read profile picture: ${err}`);
                       }
 
@@ -80,9 +80,9 @@ router.post('/register', checkNotAuthenticated,
                     });
 
                     newUser.save()
-                      .then(() => res.sendStatus(200))
+                      .then(() => res.sendStatus(201))
                       .catch((err) => {
-                        res.status(500);
+                        res.status(550);
                         res.send(`[!] Could not register user: ${err}`);
                       });
                   }
@@ -90,7 +90,7 @@ router.post('/register', checkNotAuthenticated,
             }
           });
       } catch (err) {
-        res.status(500);
+        res.status(559);
         res.send(`[!] Could not register user: ${err}`);
       }
     }
@@ -115,7 +115,7 @@ router.get('/checkAuth', (req, res) => {
   if (req.isAuthenticated()) {
     res.sendStatus(200);
   } else {
-    res.sendStatus(204);
+    res.sendStatus(401);
   }
 });
 

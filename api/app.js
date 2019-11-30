@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 const bcrypt = require('bcryptjs');
 const express = require('express');
-const { check, validationResult } = require('express-validator');
+const { check, sanitize, validationResult } = require('express-validator');
 const fs = require('fs');
 const path = require('path');
 const logger = require('morgan');
@@ -170,13 +170,56 @@ function checkNotAuthenticated(req, res, next) {
 /**
  * Settings for input validation.
  */
-function checkInput() {
+function checkAndSanitizeInput() {
   return [
-    check('firstName').isLength({ min: 1, max: 32 }),
-    check('lastName').isLength({ min: 1, max: 32 }),
-    check('email').isEmail().isLength({ min: 1, max: 32 }),
-    check('password').isLength({ min: 1, max: 256 }),
-    check('username').isLength({ min: 1, max: 32 }),
+    check('firstName')
+      .optional()
+      .isLength({ min: 1, max: 32 })
+      .trim()
+      .escape(),
+    check('lastName')
+      .optional()
+      .isLength({ min: 1, max: 32 })
+      .trim()
+      .escape(),
+    check('email')
+      .optional()
+      .isEmail()
+      .isLength({ min: 1, max: 32 })
+      .normalizeEmail(),
+    check('password')
+      .optional()
+      .isLength({ min: 1, max: 256 })
+      .trim()
+      .escape(),
+    check('username')
+      .optional()
+      .isLength({ min: 1, max: 32 })
+      .trim()
+      .escape(),
+    check('title')
+      .optional()
+      .isLength({ min: 1, max: 32 })
+      .trim()
+      .escape(),
+    check('description')
+      .optional()
+      .isLength({ min: 1, max: 256 })
+      .trim()
+      .escape(),
+    check('text')
+      .optional()
+      .isLength({ min: 1, max: 256 })
+      .trim()
+      .escape(),
+    sanitize('firstName'),
+    sanitize('lastName'),
+    sanitize('email'),
+    sanitize('password'),
+    sanitize('username'),
+    sanitize('title'),
+    sanitize('description'),
+    sanitize('text'),
   ];
 }
 
@@ -189,6 +232,13 @@ function handleInputCheck(req, res, next) {
 
   const extractedErrors = [];
   errors.array().map((err) => extractedErrors.push({ [err.param]: err.msg }));
+
+  // TODO: Remove this.
+  const errorArray = errors.array();
+
+  for (let i = 0; i < errorArray.length; i += 1) {
+    console.log(errorArray[i]);
+  }
 
   return res.status(422).json({
     errors: extractedErrors,
@@ -240,7 +290,7 @@ expressApp.use((req, res, next) => {
 module.exports = {
   checkAuthenticated,
   checkNotAuthenticated,
-  checkInput,
+  checkAndSanitizeInput,
   handleInputCheck,
   maxFileMb,
   checkFileSize,

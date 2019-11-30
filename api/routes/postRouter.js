@@ -6,6 +6,12 @@ const Post = require('../models/Post');
 const User = require('../models/User');
 const { parser } = require('../app');
 const { checkAuthenticated } = require('../app');
+const {
+  checkAndSanitizeInput,
+  handleInputCheck,
+  checkFileSize,
+  maxFileMb,
+} = require('../app');
 
 const router = express.Router();
 
@@ -15,84 +21,97 @@ const router = express.Router();
 //    3. Delete the image from the server-side file system.
 // Ideally, the app would skip #1 and #3, instead getting the bytes directly from the request.
 // However, #1 and #3 appear to be necessary, at least based on readily available documentation.
-router.post('/addPost', checkAuthenticated, parser.single('image'), (req, res) => {
-  let image;
+router.post('/addPost',
+  checkAuthenticated,
+  parser.single('image'),
+  checkAndSanitizeInput(),
+  handleInputCheck,
+  (req, res) => {
+    let image;
 
-  const { username } = req.user;
-  const { title } = req.body;
-  const { description } = req.body;
-  const { file } = req;
+    const { username } = req.user;
+    const { title } = req.body;
+    const { description } = req.body;
+    const { file } = req;
 
-  const contentType = file.mimetype;
+    const contentType = file.mimetype;
 
-  try {
-    image = fs.readFileSync(file.path).toString('base64');
-    fs.unlinkSync(file.path);
-  } catch (err) {
-    res.status(500);
-    res.send(`[!] Could not read image: ${err}`);
-  }
+    try {
+      if (file && !checkFileSize(file)) {
+        res.status(413).send(`[!] Image is too large (max = ${maxFileMb}MB)`);
+      }
 
-  image = Buffer.from(image, 'base64');
-  const datetime = Date.now().toString();
+      image = fs.readFileSync(file.path).toString('base64');
+      fs.unlinkSync(file.path);
+    } catch (err) {
+      res.status(551);
+      res.send(`[!] Could not read image: ${err}`);
+    }
 
-  const newPost = new Post({
-    username,
-    datetime,
-    image,
-    contentType,
-    title,
-    description,
-    likes: [],
-    tags: [],
-    comments: [],
+    image = Buffer.from(image, 'base64');
+    const datetime = Date.now().toString();
+
+    const newPost = new Post({
+      username,
+      datetime,
+      image,
+      contentType,
+      title,
+      description,
+      likes: [],
+      tags: [],
+      comments: [],
+    });
+
+    newPost.save()
+      .then((post) => {
+        User.findOneAndUpdate(
+          { username },
+          { $push: { posts: post._id } },
+        )
+          .then(() => {
+            res.sendStatus(201);
+          })
+          .catch((err) => {
+            res.status(550);
+            res.send(`[!] Could not create post: ${err}`);
+          });
+      })
+      .catch((err) => {
+        res.status(550);
+        res.send(`[!] Could not create post: ${err}`);
+      });
   });
 
-  newPost.save()
-    .then((post) => {
-      User.findOneAndUpdate(
-        { username },
-        { $push: { posts: post._id } },
-      )
-        .then(() => {
-          res.sendStatus(200);
-        })
-        .catch((err) => {
-          res.status(500);
-          res.send(`[!] Could not create post: ${err}`);
-        });
-    })
-    .catch((err) => {
-      res.status(500);
-      res.send(`[!] Could not create post: ${err}`);
-    });
-});
+router.post('/editPost',
+  checkAuthenticated,
+  checkAndSanitizeInput(),
+  handleInputCheck,
+  (req, res) => {
+    const { username } = req.user;
+    const { postId } = req.body;
+    const { title } = req.body;
+    const { description } = req.body;
 
-router.post('/editPost', checkAuthenticated, (req, res) => {
-  const { username } = req.user;
-  const { postId } = req.body;
-  const { title } = req.body;
-  const { description } = req.body;
-
-  Post.findOneAndUpdate(
-    { _id: ObjectId(postId), username },
-    { $set: { title, description } },
-  )
-    .then(() => {
-      res.sendStatus(200);
-    })
-    .catch((err) => {
-      res.status(500);
-      res.send(`[!] Could not edit post: ${err}`);
-    });
-});
+    Post.findOneAndUpdate(
+      { _id: ObjectId(postId), username },
+      { $set: { title, description } },
+    )
+      .then(() => {
+        res.sendStatus(200);
+      })
+      .catch((err) => {
+        res.status(550);
+        res.send(`[!] Could not edit post: ${err}`);
+      });
+  });
 
 router.get('/getPost/:postId', checkAuthenticated, (req, res) => {
   const { postId } = req.params;
 
   Post.findOne({ _id: ObjectId(postId) }, (postInDatabase) => {
     if (!postInDatabase) {
-      res.status(500);
+      res.status(404);
       res.send(`[!] Could not find post: ${postId}`);
     } else {
       // Send the image as a Buffer.
@@ -106,8 +125,8 @@ router.get('/getPost/:postId', checkAuthenticated, (req, res) => {
     }
   })
     .catch((err) => {
-      res.status(500);
-      res.send(`[!] Could not find post: ${err}`);
+      res.status(550);
+      res.send(`[!] Could not retrieve post: ${err}`);
     });
 });
 
@@ -120,7 +139,7 @@ router.delete('/deletePost', checkAuthenticated, (req, res) => {
       res.sendStatus(200);
     })
     .catch((err) => {
-      res.status(500);
+      res.status(550);
       res.send(`[!] Could not delete post: ${err}`);
     });
 });

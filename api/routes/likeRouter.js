@@ -20,15 +20,15 @@ router.post('/addLike', checkAuthenticated, (req, res) => {
         { $push: { likes: postId } },
       )
         .then(() => {
-          res.sendStatus(200);
+          res.sendStatus(201);
         })
         .catch((err) => {
-          res.status(500);
+          res.status(550);
           res.send(`[!] Could not like post: ${err}`);
         });
     })
     .catch((err) => {
-      res.status(500);
+      res.status(550);
       res.send(`[!] Could not like post: ${err}`);
     });
 });
@@ -50,12 +50,12 @@ router.delete('/deleteLike', checkAuthenticated, (req, res) => {
           res.sendStatus(200);
         })
         .catch((err) => {
-          res.status(500);
+          res.status(550);
           res.send(`[!] Could not unlike post: ${err}`);
         });
     })
     .catch((err) => {
-      res.status(500);
+      res.status(550);
       res.send(`[!] Could not unlike post: ${err}`);
     });
 });

@@ -34,12 +34,12 @@ router.get('/getUser', checkAuthenticated, (req, res) => {
         res.status(200);
         res.send(userToSend);
       } else {
-        res.status(500);
+        res.status(404);
         res.send(`[!] User not found: ${username}`);
       }
     })
     .catch((err) => {
-      res.status(500);
+      res.status(550);
       res.send(`[!] Could not retrieve user: ${err}`);
     });
 });
@@ -55,12 +55,12 @@ router.get('/getUserPosts/:id', checkAuthenticated, (req, res) => {
         res.status(200);
         res.send(userToSend.posts);
       } else {
-        res.status(500);
+        res.status(404);
         res.send('[!] User not found');
       }
     })
     .catch((err) => {
-      res.status(500);
+      res.status(550);
       res.send(`[!] Could not retrieve user: ${err}`);
     });
 });
@@ -70,22 +70,23 @@ router.delete('/deleteUser', checkAuthenticated, (req, res) => {
   const usernameToDelete = req.body.username;
 
   if (usernameToDelete !== usernameLoggedIn) {
-    res.status(500);
+    res.status(401);
     res.send(`[!] Cannot delete another user: ${usernameToDelete}`);
   }
 
   Post.deleteMany({ username: usernameToDelete })
     .catch((err) => {
-      res.status(500);
+      res.status(550);
       res.send(`[!] Could not delete user: ${err}`);
     });
+
   User.deleteOne({ username: usernameToDelete })
     .catch((err) => {
-      res.status(500);
+      res.status(550);
       res.send(`[!] Could not delete user: ${err}`);
     })
     .then(() => {
-      res.sendStatus(200);
+      res.sendStatus(550);
     });
 });
 
@@ -100,7 +101,7 @@ router.get('/getUsers', checkAuthenticated, (res) => {
     res.send(usersToSend);
   })
     .catch((err) => {
-      res.status(500);
+      res.status(550);
       res.send(`[!] Could not retrieve users: ${err}`);
     });
 });

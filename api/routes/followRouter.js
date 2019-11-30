@@ -27,9 +27,11 @@ router.post('/follow', checkAuthenticated, async (req, res) => {
         { username: usernameB },
         { $push: { followers: usernameA } },
       );
+
+      res.sendStatus(200);
     }
   } catch (err) {
-    res.status(500);
+    res.status(550);
     res.send(`[!] Could not follow user: ${err}`);
   }
 });
@@ -55,9 +57,11 @@ router.delete('/unfollow', checkAuthenticated, async (req, res) => {
         { username: usernameB },
         { $pullAll: { followers: usernameA } },
       );
+
+      res.sendStatus(200);
     }
   } catch (err) {
-    res.status(500);
+    res.status(550);
     res.send(`[!] Could not unfollow user: ${err}`);
   }
 });
