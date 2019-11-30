@@ -44,19 +44,17 @@ class Profile extends Component {
                 <ul className="uk-margin-remove" style={{ padding: '0px', listStyleType: 'none' }}>
                   <li className="uk-text-bold uk-margin-bottom uk-margin-right uk-float-left">
                     <span id="posts" className="uk-text-light">
-                      posts
+                      posts: {data.posts.length}
                     </span>
                   </li>
                   <li className="uk-text-bold uk-margin-bottom uk-margin-left uk-margin-right uk-float-left">
-                    {data.followers}
                     <span id="followers" className="uk-text-light">
-                     followers
+                     followers: {data.followers.length}
                     </span>
                   </li>
                   <li className="uk-text-bold uk-margin-bottom uk-margin-left uk-float-left">
-                    {data.followees}
                     <span id="following" className="uk-text-light">
-                     following
+                     following: {data.followees.length}
                     </span>
                   </li>
                 </ul>
