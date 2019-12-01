@@ -90,16 +90,17 @@ router.delete('/deleteUser', checkAuthenticated, (req, res) => {
     });
 });
 
-router.get('/getUsers', checkAuthenticated, (res) => {
-  User.find({}, (usersInDatabase) => {
-    const usersToSend = [];
+router.get('/getUsers', checkAuthenticated, (req, res) => {
+  User.find()
+    .then((usersInDatabase) => {
+      const usersToSend = [];
 
-    usersInDatabase.forEach((user) => {
-      usersToSend.push(user.username);
-    });
+      usersInDatabase.forEach((user) => {
+        usersToSend.push(user.username);
+      });
 
-    res.send(usersToSend);
-  })
+      res.send(usersToSend);
+    })
     .catch((err) => {
       res.status(550);
       res.send(`[!] Could not retrieve users: ${err}`);
