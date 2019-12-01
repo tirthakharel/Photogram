@@ -2,31 +2,53 @@
 
 import React, { Component } from 'react';
 import NavBar from './NavBar';
+import {getUser} from '../javascripts/userRequests';
 
-const testData = {
-  firstName: 'Yiwen',
-  lastName: 'Tang',
-  username: 'Yiwen123',
-  posts: ['1', '2'],
-  followers: ['John', 'Jack'],
-  followees: ['Tom', 'Jerry', 'Nick'],
-  isSelf: true,
-  // FIXME: Profile Image Missing!!
-};
+// const testData = {
+//   firstName: 'Yiwen',
+//   lastName: 'Tang',
+//   username: 'Yiwen123',
+//   posts: ['1', '2'],
+//   followers: ['John', 'Jack'],
+//   followees: ['Tom', 'Jerry', 'Nick'],
+//   // FIXME: Profile Image Missing!!
+// };
 
 class Profile extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      data: testData,
+      data: null,
+      currentUser: props.currentUser,
+      isLoading: true
     };
   }
 
-  render() {
-    const { data } = this.state;
-    // const { isSelf } = data;
+  componentDidMount() {
+    getUser()
+      .then((data) => {
+        data.json()
+          .then((userInfo) => {
+            this.setState({ data: userInfo, isLoading: false });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
+  render() {
+    const { data, isLoading } = this.state;
+    if(isLoading){
+      return(
+        <h1>Wait a Sec...</h1>
+      )
+    }
+    else{
     return (
       <div>
         <NavBar />
@@ -39,7 +61,7 @@ class Profile extends Component {
               <div className="uk-section uk-section-default uk-padding-small uk-margin-left">
                 <div className="uk-flex uk-margin-small-bottom uk-flex-row uk-flex-middle">
                   <h1 id="username" className="uk-text-light uk-margin-remove uk-heading-xsmall">{data.username}</h1>
-                  <a className="uk-button uk-button-default uk-margin-left" style={{height: '40px'}} href="#create-post">Create Post</a>
+                  <a className="uk-button uk-button-default uk-margin-left" style={{height: '40px'}} href="/makePost">Create Post</a>
                 </div>
                 <ul className="uk-margin-remove" style={{ padding: '0px', listStyleType: 'none' }}>
                   <li className="uk-text-bold uk-margin-bottom uk-margin-right uk-float-left">
@@ -49,12 +71,12 @@ class Profile extends Component {
                   </li>
                   <li className="uk-text-bold uk-margin-bottom uk-margin-left uk-margin-right uk-float-left">
                     <span id="followers" className="uk-text-light">
-                     followers: {data.followers.length}
+                     followers: <a href='/follower'>{data.followers.length}</a>
                     </span>
                   </li>
                   <li className="uk-text-bold uk-margin-bottom uk-margin-left uk-float-left">
                     <span id="following" className="uk-text-light">
-                     following: {data.followees.length}
+                     following: <a href='/followee'>{data.followees.length}</a>
                     </span>
                   </li>
                 </ul>
@@ -71,6 +93,7 @@ class Profile extends Component {
         </div>
       </div>
     );
+    }
   }
 }
 
