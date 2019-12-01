@@ -9,6 +9,7 @@ class Feed extends Component {
     super(props);
 
     this.state = {
+      currentUser: null,
       data: null,
       isLoading: true,
       posts: [],
@@ -21,7 +22,6 @@ class Feed extends Component {
         res.json()
           .then((usr) => {
             const postsToShow = usr.posts;
-            console.log(postsToShow);
             usr.followees.forEach((val) => {
               getUserPosts(val)
                 .then((arr) => {
@@ -31,8 +31,7 @@ class Feed extends Component {
                   console.log(err);
                 });
             });
-            console.log(postsToShow);
-            this.setState({ posts: postsToShow, isLoading: false });
+            this.setState({ currentUser: usr, posts: postsToShow, isLoading: false });
           })
           .catch((err) => {
             console.log(err);
@@ -44,12 +43,12 @@ class Feed extends Component {
   }
 
   render() {
-    const { isLoading, posts } = this.state;
+    const { isLoading, posts, currentUser } = this.state;
 
     const renderPosts = [];
 
     posts.forEach((id) => {
-      renderPosts.push(<Post postid={id} />);
+      renderPosts.push(<Post postid={id} currentUser={currentUser}/>);
     });
 
     if (isLoading) {

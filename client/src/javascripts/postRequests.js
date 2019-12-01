@@ -3,18 +3,16 @@
 import { api } from '../api';
 
 async function addPost(title, description, file) {
+  // eslint-disable-next-line no-undef
+  const formData = new FormData();
+  formData.append('title', title);
+  formData.append('description', description);
+  formData.append('image', file);
+
   return fetch(`${api.url}/addPost`,
     {
       method: 'POST',
-      body: JSON.stringify({
-        title,
-        description,
-        file,
-      }),
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-        Accept: 'application/json; charset=UTF-8',
-      },
+      body: formData,
       credentials: 'include',
       mode: 'cors',
     });

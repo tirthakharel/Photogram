@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { getPost } from '../javascripts/postRequests';
@@ -20,11 +21,13 @@ class Post extends Component {
 
     getPost(postid)
       .then((data) => {
-        if (data) {
-          this.setState({ isLoading: false, data });
-        } else {
-          throw Error('Data does not exist');
-        }
+        data.json()
+          .then((post) => {
+            this.setState({ isLoading: false, data: post });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       })
       .catch((err) => {
         console.log(err);
@@ -46,12 +49,14 @@ class Post extends Component {
       );
     }
 
-    if (!currentUser) {
+    if (currentUser.username !== data.username) {
       return (
         <div className="uk-card uk-card-default uk-card-hover uk-align-center" uk-scrollspy="cls: uk-animation-slide-left; repeat: true">
-          <h3 className="uk-card-title uk-text-left-medium">{data.title}</h3>
+          <div className="uk-card-header">
+            <h3 className="uk-card-title uk-margin-small-top">{data.title}</h3>
+          </div>
           <div className="uk-card-media-top">
-            <img src={`data:image/png;base64,${data.image}`} alt="" />
+            <img src={`data:image/png;base64,${btoa(String.fromCharCode.apply(null, data.image.data))}`} alt="" />
           </div>
           <div className="uk-card-body">
             <h3 className="uk-card-title uk-text-small">
@@ -67,9 +72,11 @@ class Post extends Component {
 
     return (
       <div className="uk-card uk-card-default uk-card-hover uk-align-center" uk-scrollspy="cls: uk-animation-slide-left; repeat: true">
-        <h3 className="uk-card-title uk-text-left-medium">{data.title}</h3>
+        <div className="uk-card-header">
+          <h3 className="uk-card-title uk-margin-small-top">{data.title}</h3>
+        </div>
         <div className="uk-card-media-top">
-          <img src={`data:image/png;base64,${data.image}`} alt="" />
+          <img src={`data:image/png;base64,${btoa(String.fromCharCode.apply(null, data.image.data))}`} alt="" />
         </div>
         <div className="uk-card-body">
           <h3 className="uk-card-title uk-text-small">

@@ -19,20 +19,9 @@ class Register extends Component {
       image: null,
     };
 
-    this.callAPI = this.callAPI.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleFileChange = this.handleFileChange.bind(this);
-  }
-
-  componentDidMount() {
-    this.callAPI();
-  }
-
-  callAPI() {
-    fetch(`${api.url}/testAPI`)
-      .then((res) => this.setState({ apiResponse: res }))
-      .catch((err) => err);
   }
 
   handleChange(event) {
