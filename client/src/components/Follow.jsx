@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import NavBar from './NavBar';
 import { api } from '../api';
+import {getUsers} from '../javascripts/userRequests'
 
 const Testdata = {
     recommends: [
@@ -19,10 +20,10 @@ class Follow extends Component {
     super(props);
 
     this.state = { 
-      data: Testdata,
-      apiResponse: '' };
-
-    this.callAPI = this.callAPI.bind(this);
+      data: null,
+      currentUser: props.currentUser,
+      isLoading: true
+    };
   }
 
   componentDidMount() {
@@ -30,18 +31,42 @@ class Follow extends Component {
   }
 
   callAPI() {
-    fetch(`${api.url}/testAPI`)
-      .then((res) => this.setState({ apiResponse: res }))
-      .catch((err) => err);
+    let arr = []
+    getUsers()
+      .then((data) => {
+        data.json()
+          .then((usersInfo) => { 
+            usersInfo.forEach((element) => {
+              if (element.username != this.state.currentUser){
+                arr.push(element);
+              }
+            });
+            this.setState({data: arr, isLoading: false});
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   render() {
-    const {data} = this.state;
-    const recommends = data.recommends.map((recommend) => { return(
+    const {data, isLoading} = this.state;
+    if(isLoading){
+      return(
+        <div className='uk-cover-container uk-flex uk-flex-center uk-flex-middle'>
+        <h1>Wait a Sec...</h1>
+        </div>
+      )
+    }
+    else{
+    const recommends = data.map((recommend) => { return(
          <div className="uk-card uk-card-default uk-card-hover uk-align-center" uk-scrollspy="cls: uk-animation-slide-left; repeat: true">
             <div className="uk-card uk-card-primary uk-card-body uk-card-hover uk-margin-top">
-              <h3 class="uk-card-title"><a href=''>{recommend}</a></h3>
-              <span><p>Follow {recommend} to see more POSTs!</p> <button className='uk-button uk-button-danger'>Follow</button></span>
+              <h3 class="uk-card-title"><a href=''>{recommend.username}</a></h3>
+              <span><p>Follow {recommend.username} to see more POSTs!</p> <button className='uk-button uk-button-danger'>Follow</button></span>
             </div>
         </div>
     )});
@@ -58,4 +83,5 @@ class Follow extends Component {
     </div>)
         }
     }  
+  }
 export default Follow;

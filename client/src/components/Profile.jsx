@@ -4,16 +4,6 @@ import React, { Component } from 'react';
 import NavBar from './NavBar';
 import {getUser} from '../javascripts/userRequests';
 
-// const testData = {
-//   firstName: 'Yiwen',
-//   lastName: 'Tang',
-//   username: 'Yiwen123',
-//   posts: ['1', '2'],
-//   followers: ['John', 'Jack'],
-//   followees: ['Tom', 'Jerry', 'Nick'],
-//   // FIXME: Profile Image Missing!!
-// };
-
 class Profile extends Component {
   constructor(props) {
     super(props);
@@ -45,7 +35,9 @@ class Profile extends Component {
     const { data, isLoading } = this.state;
     if(isLoading){
       return(
+        <div className='uk-cover-container uk-flex uk-flex-center uk-flex-middle'>
         <h1>Wait a Sec...</h1>
+        </div>
       )
     }
     else{
