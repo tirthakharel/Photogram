@@ -109,10 +109,13 @@ router.post('/editPost',
 router.get('/getPost/:postId', checkAuthenticated, (req, res) => {
   const { postId } = req.params;
 
-  Post.findOne({ _id: ObjectId(postId) }, (postInDatabase) => {
+  Post.findOne({ _id: ObjectId(postId) }, (err, postInDatabase) => {
     if (!postInDatabase) {
       res.status(404);
       res.send(`[!] Could not find post: ${postId}`);
+    } else if (err) {
+      res.status(550);
+      res.send(`[!] Could not retrieve post: ${err}`);
     } else {
       // Send the image as a Buffer.
       // There is no Buffer class in the browser, so it is better to do this step in the back end.
@@ -123,11 +126,7 @@ router.get('/getPost/:postId', checkAuthenticated, (req, res) => {
       postToSend.image = Buffer.from(postInDatabase.image, 'binary');
       res.send(postToSend);
     }
-  })
-    .catch((err) => {
-      res.status(550);
-      res.send(`[!] Could not retrieve post: ${err}`);
-    });
+  });
 });
 
 router.delete('/deletePost', checkAuthenticated, (req, res) => {
