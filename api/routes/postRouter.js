@@ -118,24 +118,28 @@ router.get('/getFeed/:username', checkAuthenticated, (req, res) => {
         });
 
         const numFollowees = user.followees.length;
-        let numFolloweesVisited = 0;
-
-        user.followees.forEach((followeeUsername) => {
-          User.findOne({ username: followeeUsername })
-            .then((followee) => {
-              followee.posts.forEach((postId) => {
-                feed.add(postId);
+        if (numFollowees > 0) {
+          let numFolloweesVisited = 0;
+          user.followees.forEach((followeeUsername) => {
+            User.findOne({ username: followeeUsername })
+              .then((followee) => {
+                followee.posts.forEach((postId) => {
+                  feed.add(postId);
+                });
+              })
+              .then(() => {
+                numFolloweesVisited += 1;
+                if (numFolloweesVisited >= numFollowees) {
+                  res.status(200);
+                  console.log(feed);
+                  res.send(Array.from(feed));
+                }
               });
-            })
-            .then(() => {
-              numFolloweesVisited += 1;
-
-              if (numFolloweesVisited >= numFollowees) {
-                res.status(200);
-                res.send(Array.from(feed));
-              }
-            });
-        });
+          });
+        } else {
+          res.status(200);
+          res.send(Array.from(feed));
+        }
       } else {
         res.status(404);
         res.send('[!] User not found');
