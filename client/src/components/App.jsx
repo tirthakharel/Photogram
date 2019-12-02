@@ -27,7 +27,7 @@ class App extends PureComponent {
           <Route exact path="/profile" component={RouteProtector(Profile)} />
           <Route exact path="/comments" component={RouteProtector(Comments)} />
           <Route exact path="/register" component={RouteVerifier(Register)} />
-          <Route exact path="/follow" component={Follow} />
+          <Route exact path="/follow" component={RouteProtector(Follow)} />
           <Route exact path="/followee" component={Followee} />
           <Route exact path="/follower" component={Follower} />
         </div>

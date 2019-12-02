@@ -2,18 +2,8 @@
 
 import React, { Component } from 'react';
 import NavBar from './NavBar';
-import { api } from '../api';
-import {getUsers} from '../javascripts/userRequests'
-
-const Testdata = {
-    recommends: [
-    'Jack',
-    'Rose',
-    'Nick',
-    'Tom'
-    ]
-};
-
+import {getUsers, getUser} from '../javascripts/userRequests'
+import PropTypes from 'prop-types';
 
 class Follow extends Component {
   constructor(props) {
@@ -21,27 +11,27 @@ class Follow extends Component {
 
     this.state = { 
       data: null,
-      currentUser: props.currentUser,
+      currentUser: null,
       isLoading: true
     };
   }
 
   componentDidMount() {
-    this.callAPI();
-  }
-
-  callAPI() {
-    let arr = []
+    getUser()
+      .then((data) => {
+        data.json()
+        .then((userInfo) => {
+          this.setState({currentUser: userInfo});
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    })
     getUsers()
       .then((data) => {
         data.json()
           .then((usersInfo) => { 
-            usersInfo.forEach((element) => {
-              if (element.username != this.state.currentUser){
-                arr.push(element);
-              }
-            });
-            this.setState({data: arr, isLoading: false});
+            this.setState({data: usersInfo, isLoading: false});
           })
           .catch((err) => {
             console.log(err);
@@ -53,7 +43,7 @@ class Follow extends Component {
   }
 
   render() {
-    const {data, isLoading} = this.state;
+    const {data, isLoading, currentUser} = this.state;
     if(isLoading){
       return(
         <div className='uk-cover-container uk-flex uk-flex-center uk-flex-middle'>
@@ -62,14 +52,17 @@ class Follow extends Component {
       )
     }
     else{
-    const recommends = data.map((recommend) => { return(
-         <div className="uk-card uk-card-default uk-card-hover uk-align-center" uk-scrollspy="cls: uk-animation-slide-left; repeat: true">
+    const recommends = data.map((name) => { 
+      if(name !== currentUser.username){
+      return(
+         <div id = {name} className="uk-card uk-card-default uk-card-hover uk-align-center" uk-scrollspy="cls: uk-animation-slide-left; repeat: true">
             <div className="uk-card uk-card-primary uk-card-body uk-card-hover uk-margin-top">
-              <h3 class="uk-card-title"><a href=''>{recommend.username}</a></h3>
-              <span><p>Follow {recommend.username} to see more POSTs!</p> <button className='uk-button uk-button-danger'>Follow</button></span>
+              <h3 class="uk-card-title"><a href=''>{name}</a></h3>
+              <span><p>Follow {name} to see more POSTs!</p> <button className='uk-button uk-button-danger'>Follow</button></span>
             </div>
         </div>
-    )});
+    )}
+  });
     return(
     <div>    
         <NavBar />
@@ -84,4 +77,11 @@ class Follow extends Component {
         }
     }  
   }
+
+
+Follow.propTypes = {
+    currentUser: PropTypes.bool.isRequired,
+  };
+
+
 export default Follow;
