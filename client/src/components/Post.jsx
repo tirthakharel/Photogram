@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Heart from './Heart';
 import { getPost } from '../javascripts/postRequests';
 import loading from '../images/loading-post.svg';
 
@@ -49,7 +50,15 @@ class Post extends Component {
       );
     }
 
-    if (currentUser.username !== data.username) {
+    // eslint-disable-next-line no-underscore-dangle
+    const postid = data._id;
+    let isLiked = false;
+    const { likes } = data;
+    if (likes.indexOf(currentUser) !== -1) {
+      isLiked = true;
+    }
+
+    if (currentUser !== data.username) {
       return (
         <div className="uk-card uk-card-default uk-card-hover uk-align-center" uk-scrollspy="cls: uk-animation-slide-left; repeat: true">
           <div className="uk-card-header">
@@ -64,7 +73,7 @@ class Post extends Component {
               <a href="/">{` ${data.username}`}</a>
             </h3>
             <p id="">{data.description}</p>
-            <a href="/" uk-icon="heart"> </a>
+            <Heart isLiked={isLiked} postid={postid} />
           </div>
         </div>
       );
@@ -84,7 +93,7 @@ class Post extends Component {
             <a href="/">{` ${data.username}`}</a>
           </h3>
           <p id="">{data.description}</p>
-          <a href="/" uk-icon="heart"> </a>
+          <Heart isLiked={isLiked} postid={postid} />
         </div>
       </div>
     );
@@ -92,8 +101,8 @@ class Post extends Component {
 }
 
 Post.propTypes = {
-  postid: PropTypes.number.isRequired,
-  currentUser: PropTypes.bool.isRequired,
+  postid: PropTypes.string.isRequired,
+  currentUser: PropTypes.string.isRequired,
 };
 
 export default Post;

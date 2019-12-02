@@ -1,16 +1,13 @@
-/* globals fetch */
-
 import React, { Component } from 'react';
 import { rgba } from 'polished';
-import { api } from '../api';
 import { register } from '../javascripts/authRequests';
+import logo from '../images/photogram.png';
 
 class Register extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      apiResponse: '',
       firstName: '',
       lastName: '',
       username: '',
@@ -70,7 +67,7 @@ class Register extends Component {
         <div className="uk-border-rounded uk-width-large uk-padding-large uk-position-z-index" uk-scrollspy="cls: uk-animation-fade" style={{ backgroundColor: rgba(253, 253, 253, 0.253) }}>
           <div className="uk-text-center uk-margin">
             {' '}
-            <img src={require('../images/photogram.png')} alt="Logo" />
+            <img src={logo} alt="Logo" />
           </div>
           <h4 className="uk-heading-line uk-text-center" style={{ color: rgba(255, 255, 255, 0.8) }}><span> Registration </span></h4>
           <form onSubmit={this.handleSubmit} className="toggle-class">

@@ -1,5 +1,3 @@
-/* globals fetch */
-
 import React, { Component } from 'react';
 import { addPost } from '../javascripts/postRequests';
 import NavBar from './NavBar';

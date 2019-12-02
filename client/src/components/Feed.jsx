@@ -9,8 +9,7 @@ class Feed extends Component {
     super(props);
 
     this.state = {
-      currentUser: null,
-      data: null,
+      currentUser: '',
       isLoading: true,
       posts: [],
     };
@@ -25,7 +24,7 @@ class Feed extends Component {
               .then((feed) => {
                 feed.json()
                   .then((posts) => {
-                    this.setState({ currentUser: usr, posts, isLoading: false });
+                    this.setState({ currentUser: usr.username, posts, isLoading: false });
                   });
               });
           })
@@ -44,7 +43,7 @@ class Feed extends Component {
     const renderPosts = [];
 
     posts.forEach((id) => {
-      renderPosts.push(<Post postid={id} currentUser={currentUser} />);
+      renderPosts.push(<Post key={id} postid={id} currentUser={currentUser} />);
     });
 
     if (isLoading) {
