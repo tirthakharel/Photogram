@@ -106,6 +106,47 @@ router.post('/editPost',
       });
   });
 
+router.get('/getFeed/:username', checkAuthenticated, (req, res) => {
+  const { username } = req.params;
+  const feed = new Set();
+
+  User.findOne({ username })
+    .then((user) => {
+      if (user) {
+        user.posts.forEach((postId) => {
+          feed.add(postId);
+        });
+
+        const numFollowees = user.followees.length;
+        let numFolloweesVisited = 0;
+
+        user.followees.forEach((followeeUsername) => {
+          User.findOne({ username: followeeUsername })
+            .then((followee) => {
+              followee.posts.forEach((postId) => {
+                feed.add(postId);
+              });
+            })
+            .then(() => {
+              numFolloweesVisited += 1;
+
+              if (numFolloweesVisited >= numFollowees) {
+                res.status(200);
+                res.send(Array.from(feed));
+              }
+            });
+        });
+      } else {
+        res.status(404);
+        res.send('[!] User not found');
+      }
+    })
+    .catch((err) => {
+      res.status(550);
+      res.send(`[!] Could not retrieve user: ${err}`);
+    });
+});
+
 router.get('/getPost/:postId', checkAuthenticated, (req, res) => {
   const { postId } = req.params;
 

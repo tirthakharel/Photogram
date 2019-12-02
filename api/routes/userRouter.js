@@ -44,27 +44,6 @@ router.get('/getUser', checkAuthenticated, (req, res) => {
     });
 });
 
-router.get('/getUserPosts/:id', checkAuthenticated, (req, res) => {
-  const { id } = req.params;
-
-  User.findOne({ _id: ObjectId(id) })
-    .then((userInDatabase) => {
-      if (userInDatabase) {
-        const userToSend = userInDatabase;
-
-        res.status(200);
-        res.send(userToSend.posts);
-      } else {
-        res.status(404);
-        res.send('[!] User not found');
-      }
-    })
-    .catch((err) => {
-      res.status(550);
-      res.send(`[!] Could not retrieve user: ${err}`);
-    });
-});
-
 router.delete('/deleteUser', checkAuthenticated, (req, res) => {
   const usernameLoggedIn = req.user.username;
   const usernameToDelete = req.body.username;

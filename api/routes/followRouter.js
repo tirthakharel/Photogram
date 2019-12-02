@@ -4,65 +4,91 @@ const { checkAuthenticated } = require('../app');
 
 const router = express.Router();
 
-// TODO: Fix these routes so that all they require in body is a username.
-
-router.post('/follow', checkAuthenticated, async (req, res) => {
+router.post('/follow', checkAuthenticated, (req, res) => {
   // User A will follow User B
   // User A --[FOLLOW]--> User B
 
   try {
-    const  usernameA  = req.user.username;
-    const  followeesA  = req.user.followees;
-    const  usernameB  = req.body.username;
+    const usernameA = req.user.username;
+    const usernameB = req.body.username;
 
-    if (!followeesA.includes(usernameB)) {
-      followeesA.push(usernameB);
+    User.findOne({ username: usernameA })
+      .then((user) => {
+        const followeesA = user.followees;
 
-      await User.findOneAndUpdate(
-        { username: usernameA },
-        { $set: { followees: followeesA } },
-      );
-
-      await User.findOneAndUpdate(
-        { username: usernameB },
-        { $push: { followers: usernameA } },
-      );
-
-      res.sendStatus(200);
-    }
+        if (!followeesA.includes(usernameB)) {
+          // Update User A's followees.
+          User.findOneAndUpdate(
+            { username: usernameA },
+            { $push: { followees: usernameB } },
+          )
+            .then(() => {
+            // Update User B's followers.
+              User.findOneAndUpdate(
+                { username: usernameB },
+                { $push: { followers: usernameA } },
+              )
+                .then(() => {
+                  res.sendStatus(200);
+                })
+                .catch((err) => {
+                  res.status(550);
+                  res.send(`[!] Could not follow user: ${err}`);
+                });
+            })
+            .catch((err) => {
+              res.status(550);
+              res.send(`[!] Could not follow user: ${err}`);
+            });
+        }
+      });
   } catch (err) {
     res.status(550);
     res.send(`[!] Could not follow user: ${err}`);
   }
 });
 
-router.delete('/unfollow', checkAuthenticated, async (req, res) => {
+router.delete('/unfollow', checkAuthenticated, (req, res) => {
   // User A will unfollow User B
   // User A --[UNFOLLOW]--> User B
 
   try {
-    const { usernameA } = req.user.username;
-    const { followeesA } = req.user.followees;
-    const { usernameB } = req.body.username;
+    const usernameA = req.user.username;
+    const usernameB = req.body.username;
 
-    if (followeesA.includes(usernameB)) {
-      followeesA.filter((username) => username === usernameB);
+    User.findOne({ username: usernameA })
+      .then((user) => {
+        const followeesA = user.followees;
 
-      await User.findOneAndUpdate(
-        { username: usernameA },
-        { $set: { followees: followeesA } },
-      );
-
-      await User.findOneAndUpdate(
-        { username: usernameB },
-        { $pullAll: { followers: usernameA } },
-      );
-
-      res.sendStatus(200);
-    }
+        if (followeesA.includes(usernameB)) {
+          // Update User A's followees.
+          User.findOneAndUpdate(
+            { username: usernameA },
+            { $pullAll: { followees: usernameB } },
+          )
+            .then(() => {
+            // Update User B's followers.
+              User.findOneAndUpdate(
+                { username: usernameB },
+                { $pullAll: { followers: usernameA } },
+              )
+                .then(() => {
+                  res.sendStatus(200);
+                })
+                .catch((err) => {
+                  res.status(550);
+                  res.send(`[!] Could not unfollow user: ${err}`);
+                });
+            })
+            .catch((err) => {
+              res.status(550);
+              res.send(`[!] Could not unfollow user: ${err}`);
+            });
+        }
+      });
   } catch (err) {
     res.status(550);
-    res.send(`[!] Could not unfollow user: ${err}`);
+    res.send(`[!] Could not follow user: ${err}`);
   }
 });
 

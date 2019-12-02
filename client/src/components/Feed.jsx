@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import NavBar from './NavBar';
 import Post from './Post';
 import { getUser } from '../javascripts/userRequests';
-import { getUserPosts } from '../javascripts/postRequests';
+import { getFeed } from '../javascripts/postRequests';
 
 class Feed extends Component {
   constructor(props) {
@@ -21,17 +21,13 @@ class Feed extends Component {
       .then((res) => {
         res.json()
           .then((usr) => {
-            const postsToShow = usr.posts;
-            usr.followees.forEach((val) => {
-              getUserPosts(val)
-                .then((arr) => {
-                  postsToShow.push(arr);
-                })
-                .catch((err) => {
-                  console.log(err);
-                });
-            });
-            this.setState({ currentUser: usr, posts: postsToShow, isLoading: false });
+            getFeed(usr.username)
+              .then((feed) => {
+                feed.json()
+                  .then((posts) => {
+                    this.setState({ currentUser: usr, posts, isLoading: false });
+                  });
+              });
           })
           .catch((err) => {
             console.log(err);
@@ -48,7 +44,7 @@ class Feed extends Component {
     const renderPosts = [];
 
     posts.forEach((id) => {
-      renderPosts.push(<Post postid={id} currentUser={currentUser}/>);
+      renderPosts.push(<Post postid={id} currentUser={currentUser} />);
     });
 
     if (isLoading) {

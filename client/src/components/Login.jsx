@@ -1,4 +1,4 @@
-/* globals fetch */
+/* globals */
 
 import React, { Component } from 'react';
 import { rgba } from 'polished';

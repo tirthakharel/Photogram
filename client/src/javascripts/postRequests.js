@@ -49,6 +49,19 @@ async function getPost(postId) {
     });
 }
 
+async function getFeed(username) {
+  return fetch(`${api.url}/getFeed/${username}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+        Accept: 'application/json; charset=UTF-8',
+      },
+      credentials: 'include',
+      mode: 'cors',
+    });
+}
+
 async function deletePost(postId) {
   return fetch(`${api.url}/deletePost`,
     {
@@ -65,23 +78,10 @@ async function deletePost(postId) {
     });
 }
 
-async function getUserPosts(userId) {
-  return fetch(`${api.url}/getUserPosts/${userId}`,
-    {
-      method: 'GET',
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-        Accept: 'application/json; charset=UTF-8',
-      },
-      credentials: 'include',
-      mode: 'cors',
-    });
-}
-
 export {
   addPost,
   editPost,
   getPost,
+  getFeed,
   deletePost,
-  getUserPosts,
 };
