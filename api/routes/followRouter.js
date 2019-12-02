@@ -11,9 +11,9 @@ router.post('/follow', checkAuthenticated, async (req, res) => {
   // User A --[FOLLOW]--> User B
 
   try {
-    const { usernameA } = req.user.username;
-    const { followeesA } = req.user.followees;
-    const { usernameB } = req.body.username;
+    const  usernameA  = req.user.username;
+    const  followeesA  = req.user.followees;
+    const  usernameB  = req.body.username;
 
     if (!followeesA.includes(usernameB)) {
       followeesA.push(usernameB);
