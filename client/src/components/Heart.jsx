@@ -27,8 +27,7 @@ class Heart extends Component {
 
     if (liked) {
       deleteLike(postid)
-        .then((res) => {
-          console.log(res);
+        .then(() => {
           this.setState({ liked: false });
         })
         .catch((err) => {
@@ -36,8 +35,7 @@ class Heart extends Component {
         });
     } else {
       addLike(postid)
-        .then((res) => {
-          console.log(res);
+        .then(() => {
           this.setState({ liked: true });
         })
         .catch((err) => {
