@@ -2,42 +2,47 @@
 
 import React, { Component } from 'react';
 import NavBar from './NavBar';
-import { api } from '../api';
-
-const Testdata = {
-    followers: [
-    'Jack',
-    'Rose',
-    'Nick',
-    'Tom'
-    ]
-};
-
+import { getUser } from '../javascripts/userRequests';
+import PropTypes from 'prop-types';
 
 class Follower extends Component {
   constructor(props) {
     super(props);
 
     this.state = { 
-      data: Testdata,
-      apiResponse: '' };
-
-    this.callAPI = this.callAPI.bind(this);
-  }
+      data: null,
+      isLoading: true,
+      currentUser: null
+  };
+}
 
   componentDidMount() {
-    this.callAPI();
-  }
-
-  callAPI() {
-    fetch(`${api.url}/testAPI`)
-      .then((res) => this.setState({ apiResponse: res }))
-      .catch((err) => err);
+    getUser()
+    .then((data) => {
+      data.json()
+        .then((userInfo) => {
+          this.setState({ data: userInfo, isLoading: false });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   }
 
   render() {
-    const {data} = this.state;
-    const recommends = data.followers.map((follower) => { return(
+    const { data, isLoading } = this.state;
+    if(isLoading){
+      return(
+        <div className='uk-cover-container uk-flex uk-flex-center uk-flex-middle'>
+        <h1>Wait a Sec...</h1>
+        </div>
+      )
+    }
+    else{
+    const followers = data.followers.map((follower) => { return(
          <div className="uk-card uk-card-default uk-card-hover uk-align-center" uk-scrollspy="cls: uk-animation-slide-left; repeat: true">
             <div className="uk-card uk-card-primary uk-card-body uk-card-hover uk-margin-top">
               <h3 class="uk-card-title"><a href=''>{follower}</a></h3>
@@ -51,11 +56,17 @@ class Follower extends Component {
             <div className="uk-container uk-container-small">
                 <div id="cards" className="uk-child-width-1-2@m uk-align-center uk-background-default">
                     <div className="uk-card uk-card-default uk-card-hover uk-align-center" uk-scrollspy="cls: uk-animation-slide-left; repeat: true">
-                        {recommends}
+                        {followers}
                     </div>
                 </div>
         </div>
     </div>)
         }
     }  
+}
+
+Follower.propTypes = {
+  currentUser: PropTypes.bool.isRequired,
+};
+
 export default Follower;
