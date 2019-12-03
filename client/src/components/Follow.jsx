@@ -56,7 +56,7 @@ class Follow extends Component {
     follow(usernameB)
       .then((res) => {
         if (res.ok) {
-          this.props.history.push('/');
+          this.props.history.push('/profile');
         } else {
           console.log(res);
         }

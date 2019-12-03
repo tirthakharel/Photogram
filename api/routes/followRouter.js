@@ -7,7 +7,7 @@ const router = express.Router();
 router.post('/follow', checkAuthenticated, (req, res) => {
   // User A will follow User B
   // User A --[FOLLOW]--> User B
-
+  if(req.body.method === 'follow'){
   try {
     const usernameA = req.user.username;
     const usernameB = req.body.username;
@@ -46,16 +46,10 @@ router.post('/follow', checkAuthenticated, (req, res) => {
     res.status(550);
     res.send(`[!] Could not follow user: ${err}`);
   }
-});
-
-router.delete('/unfollow', checkAuthenticated, (req, res) => {
-  // User A will unfollow User B
-  // User A --[UNFOLLOW]--> User B
-
+} else if (req.body.method === 'unfollow') {
   try {
     const usernameA = req.user.username;
     const usernameB = req.body.username;
-
     User.findOne({ username: usernameA })
       .then((user) => {
         const followeesA = user.followees;
@@ -64,13 +58,13 @@ router.delete('/unfollow', checkAuthenticated, (req, res) => {
           // Update User A's followees.
           User.findOneAndUpdate(
             { username: usernameA },
-            { $pullAll: { followees: usernameB } },
+            { $pullAll: { followees: [usernameB] } },
           )
             .then(() => {
             // Update User B's followers.
               User.findOneAndUpdate(
                 { username: usernameB },
-                { $pullAll: { followers: usernameA } },
+                { $pullAll: { followers: [usernameA] } },
               )
                 .then(() => {
                   res.sendStatus(200);
@@ -90,6 +84,52 @@ router.delete('/unfollow', checkAuthenticated, (req, res) => {
     res.status(550);
     res.send(`[!] Could not follow user: ${err}`);
   }
+}
 });
+
+// router.post('/unfollow', checkAuthenticated, async (req, res) => {
+//   // User A will unfollow User B
+//   // User A --[UNFOLLOW]--> User B
+
+//   try {
+//     const usernameA = req.user.username;
+//     const usernameB = req.body.username;
+//     console.log(usernameA)
+//     console.log(usernameB)
+//     await User.findOne({ username: usernameA })
+//       .then((user) => {
+//         const followeesA = user.followees;
+
+//         if (followeesA.includes(usernameB)) {
+//           // Update User A's followees.
+//           await User.findOneAndUpdate(
+//             { username: usernameA },
+//             { $pullAll: { followees: [usernameB] } },
+//           )
+//             .then(() => {
+//             // Update User B's followers.
+//               await User.findOneAndUpdate(
+//                 { username: usernameB },
+//                 { $pullAll: { followers: [usernameA] } },
+//               )
+//                 .then(() => {
+//                   res.sendStatus(200);
+//                 })
+//                 .catch((err) => {
+//                   res.status(550);
+//                   res.send(`[!] Could not unfollow user: ${err}`);
+//                 });
+//             })
+//             .catch((err) => {
+//               res.status(550);
+//               res.send(`[!] Could not unfollow user: ${err}`);
+//             });
+//         }
+//       });
+//   } catch (err) {
+//     res.status(550);
+//     res.send(`[!] Could not follow user: ${err}`);
+//   }
+// });
 
 module.exports = router;

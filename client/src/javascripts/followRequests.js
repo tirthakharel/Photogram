@@ -8,6 +8,7 @@ async function follow(username) {
       method: 'POST',
       body: JSON.stringify({
         username,
+        method: 'follow',
       }),
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
@@ -19,11 +20,12 @@ async function follow(username) {
 }
 
 async function unfollow(username) {
-  return fetch(`${api.url}/unfollow`,
+  return fetch(`${api.url}/follow`,
     {
-      method: 'DELETE',
+      method: 'POST',
       body: JSON.stringify({
         username,
+        method: 'unfollow',
       }),
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
