@@ -3,11 +3,12 @@
 import { api } from '../api';
 
 async function addLike(postId) {
-  return fetch(`${api.url}/addLike`,
+  return fetch(`${api.url}/like`,
     {
       method: 'POST',
       body: JSON.stringify({
         postId,
+        method: 'add',
       }),
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
@@ -19,11 +20,12 @@ async function addLike(postId) {
 }
 
 async function deleteLike(postId) {
-  return fetch(`${api.url}/deleteLike`,
+  return fetch(`${api.url}/like`,
     {
-      method: 'DELETE',
+      method: 'POST',
       body: JSON.stringify({
         postId,
+        method: 'remove',
       }),
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
