@@ -12,6 +12,7 @@ const session = require('express-session');
 const methodOverride = require('method-override');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const MongoStore = require('connect-mongo')(session);
 const multer = require('multer');
 const User = require('./models/User');
 require('dotenv').config();
@@ -199,17 +200,17 @@ function checkAndSanitizeInput() {
       .escape(),
     check('title')
       .optional()
-      .isLength({ min: 1, max: 32 })
+      .isLength({ max: 32 })
       .trim()
       .escape(),
     check('description')
       .optional()
-      .isLength({ min: 1, max: 256 })
+      .isLength({ max: 256 })
       .trim()
       .escape(),
     check('text')
       .optional()
-      .isLength({ min: 1, max: 256 })
+      .isLength({ max: 256 })
       .trim()
       .escape(),
     sanitize('firstName'),
@@ -271,6 +272,7 @@ expressApp.use(logger('dev'));
 expressApp.use(flash());
 expressApp.use(session({
   secret: process.env.SESSION_SECRET,
+  store: new MongoStore({ mongooseConnection: mongoose.connection }),
   resave: false,
   saveUninitialized: false,
 }));

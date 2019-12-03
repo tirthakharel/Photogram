@@ -49,8 +49,8 @@ async function getPost(postId) {
     });
 }
 
-async function getFeed(username) {
-  return fetch(`${api.url}/getFeed/${username}`,
+async function getFeed() {
+  return fetch(`${api.url}/getFeed`,
     {
       method: 'GET',
       headers: {

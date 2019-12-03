@@ -39,6 +39,7 @@ router.post('/addPost',
     try {
       if (file && !checkFileSize(file)) {
         res.status(413).send(`[!] Image is too large (max = ${maxFileMb}MB)`);
+        return;
       }
 
       image = fs.readFileSync(file.path).toString('base64');
@@ -46,6 +47,7 @@ router.post('/addPost',
     } catch (err) {
       res.status(551);
       res.send(`[!] Could not read image: ${err}`);
+      return;
     }
 
     image = Buffer.from(image, 'base64');
@@ -106,8 +108,8 @@ router.post('/editPost',
       });
   });
 
-router.get('/getFeed/:username', checkAuthenticated, (req, res) => {
-  const { username } = req.params;
+router.get('/getFeed', checkAuthenticated, (req, res) => {
+  const { username } = req.user;
   const feed = new Set();
 
   User.findOne({ username })
@@ -131,7 +133,6 @@ router.get('/getFeed/:username', checkAuthenticated, (req, res) => {
                 numFolloweesVisited += 1;
                 if (numFolloweesVisited >= numFollowees) {
                   res.status(200);
-                  console.log(feed);
                   res.send(Array.from(feed));
                 }
               });

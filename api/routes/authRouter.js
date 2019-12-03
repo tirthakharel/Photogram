@@ -58,6 +58,7 @@ router.post('/register', checkNotAuthenticated,
                       } catch (err) {
                         res.status(551);
                         res.send(`[!] Could not read profile picture: ${err}`);
+                        return;
                       }
 
                       if (bytes) {

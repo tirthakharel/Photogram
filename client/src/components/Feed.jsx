@@ -20,7 +20,7 @@ class Feed extends Component {
       .then((res) => {
         res.json()
           .then((usr) => {
-            getFeed(usr.username)
+            getFeed()
               .then((feed) => {
                 feed.json()
                   .then((posts) => {
