@@ -31,69 +31,70 @@ router.post('/register', checkNotAuthenticated,
 
     if (file && !checkFileSize(file)) {
       res.status(413).send(`[!] Profile picture is too large (max = ${maxFileMb}MB)`);
-    } else {
-      try {
-        const hashedPassword = await bcrypt.hash(password, 10);
-        let image = fs.readFileSync(path.join(__dirname, '../public/images/default-profile.png'));
+      return;
+    }
 
-        User.findOne({ email })
-          .then((userFoundByEmail) => {
-            if (userFoundByEmail) {
-              res.status(409);
-              res.send(`[!] Email address is already in use: ${email}`);
-            } else {
-              User.findOne({ username })
-                .then((userFoundByUsername) => {
-                  if (userFoundByUsername) {
-                    res.status(409);
-                    res.send(`[!] Username is already in use: ${username}`);
-                  } else {
-                    if (file) {
-                      let bytes;
+    try {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      let image = fs.readFileSync(path.join(__dirname, '../public/images/default-profile.png'));
 
-                      try {
-                        const img = fs.readFileSync(file.path);
-                        bytes = img.toString('base64');
-                        fs.unlinkSync(file.path);
-                      } catch (err) {
-                        res.status(551);
-                        res.send(`[!] Could not read profile picture: ${err}`);
-                        return;
-                      }
+      User.findOne({ email })
+        .then((userFoundByEmail) => {
+          if (userFoundByEmail) {
+            res.status(409);
+            res.send(`[!] Email address is already in use: ${email}`);
+          } else {
+            User.findOne({ username })
+              .then((userFoundByUsername) => {
+                if (userFoundByUsername) {
+                  res.status(409);
+                  res.send(`[!] Username is already in use: ${username}`);
+                } else {
+                  if (file) {
+                    let bytes;
 
-                      if (bytes) {
-                        image = Buffer.from(bytes, 'base64');
-                      }
+                    try {
+                      const img = fs.readFileSync(file.path);
+                      bytes = img.toString('base64');
+                      fs.unlinkSync(file.path);
+                    } catch (err) {
+                      res.status(551);
+                      res.send(`[!] Could not read profile picture: ${err}`);
+                      return;
                     }
 
-                    const newUser = new User({
-                      email,
-                      username,
-                      firstName,
-                      lastName,
-                      password: hashedPassword,
-                      lockout: { attempts: 0, lastFailedDatetime: -1 },
-                      image,
-                      posts: [],
-                      likes: [],
-                      followers: [],
-                      followees: [],
-                    });
-
-                    newUser.save()
-                      .then(() => res.sendStatus(201))
-                      .catch((err) => {
-                        res.status(550);
-                        res.send(`[!] Could not register user: ${err}`);
-                      });
+                    if (bytes) {
+                      image = Buffer.from(bytes, 'base64');
+                    }
                   }
-                });
-            }
-          });
-      } catch (err) {
-        res.status(559);
-        res.send(`[!] Could not register user: ${err}`);
-      }
+
+                  const newUser = new User({
+                    email,
+                    username,
+                    firstName,
+                    lastName,
+                    password: hashedPassword,
+                    lockout: { attempts: 0, lastFailedDatetime: -1 },
+                    image,
+                    posts: [],
+                    likes: [],
+                    followers: [],
+                    followees: [],
+                  });
+
+                  newUser.save()
+                    .then(() => res.sendStatus(201))
+                    .catch((err) => {
+                      res.status(550);
+                      res.send(`[!] Could not register user: ${err}`);
+                    });
+                }
+              });
+          }
+        });
+    } catch (err) {
+      res.status(559);
+      res.send(`[!] Could not register user: ${err}`);
     }
   });
 

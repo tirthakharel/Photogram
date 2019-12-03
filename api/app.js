@@ -169,7 +169,7 @@ function checkNotAuthenticated(req, res, next) {
 }
 
 /**
- * Settings for input validation.
+ * Settings for input validation and sanitization.
  */
 function checkAndSanitizeInput() {
   return [

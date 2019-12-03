@@ -1,7 +1,6 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
-const { ObjectId } = require('mongoose').Types;
 const Post = require('../models/Post');
 const User = require('../models/User');
 const { checkAuthenticated } = require('../app');
@@ -17,6 +16,8 @@ router.get('/getUser', checkAuthenticated, (req, res) => {
         const userToSend = userInDatabase;
 
         // Don't send the user's email or password.
+        userToSend.email = '';
+        userToSend.password = '';
         delete userToSend.email;
         delete userToSend.password;
 
